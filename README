@@ -1,0 +1,186 @@
+        MCIMX8M-EVK Board Support Package
+
+1. About this document
+======================
+
+This document describes common and non-hardware specific information.
+Please refer to README.hardware for hardware specific information.
+
+Dependencies
+------------
+This layer depends on the oe-core version supplied with Wind River
+Linux and the wr-kernel layer.
+
+Maintenance
+-----------
+This layer is maintained by Wind River Systems, Inc.
+Contact <support@windriver.com> or your support representative for more
+information on submitting changes.
+
+Building the nxp-imx8 layer
+---------------------------
+This layer and wr-kernel layer should be added to bblayers.conf. This
+is done automatically when using the Wind River configure wrapper.
+
+License
+-------
+Copyright (C) 2018 Wind River Systems, Inc.
+
+The right to copy, distribute or otherwise make use of this software may
+be licensed only pursuant to the terms of an applicable Wind River license
+agreement. No license to Wind River intellectual properly rights is granted
+herein. All rights not licensed by Wind River are reserved by Wind River.
+
+Source code included in tree for individual recipes is under the LICENSE
+stated in each recipe (.bb file) unless other stated.
+
+2. BSP Kernel and Distros
+=========================
+
+The following table summarizes the valid Wind River Linux distros for this BSP.
+'Y' in each content cell stands for supported; 'N' stands for not supported:
+
+  +--------------+-------------+-------------+-------------+
+  | valid/distro |   wrlinux   | wrlinux-cgl | wrlinux-ovp |
+  +--------------+-------------+-------------+-------------+
+  |    valid     |      Y      |      N      |      N      |
+  +--------------+-------------+-------------+-------------+
+
+For the supported kernel type for this BSP, please check the TARGET_SUPPORTED_KTYPES
+by running 'bitbake -e | grep "^TARGET_SUPPORTED_KTYPES"'.
+
+Note: The preempt-rt ktype is not available for this BSP/Machine at this time.
+
+
+3. Board Specific Patches
+=========================
+To get a list of patches applied to the kernel specific to this BSP,
+along with patch descriptions, use git to see what changed on the default
+kernel (git whatchanged <kernel_type>..<bsp_name>). For example:
+
+	# cd tmp-glibc/work-shared/nxp-imx8/kernel-source
+	# git whatchanged standard/base..
+
+
+4. Boot Instructions
+====================
+
+4.1 NFS Root File System
+------------------------
+
+4.1.1 Prepare Kernel, DTB, NFS and TFTP servers
+-----------------------------------------------
+The files in the following example can be found in <buildprj>/tmp-glibc/deploy/images/nxp-imx8
+and are copied to the export directory of the TFTP server.
+
+4.1.2 Download kernel
+---------------------
+
+	# tftp 0x40480000 Image
+
+4.1.3 Download DTB
+------------------
+
+	# tftp 0x43000000 fsl-imx8mq-evk.dtb
+
+4.1.4 Set bootargs and boot the system
+--------------------------------------
+
+	# setenv bootargs console=ttymxc0,115200 root=/dev/nfs rw \
+		 nfsroot=<nfs server>:<nfs root>,v3,tcp \
+		 ip=<target IP>::<gateway>:<netmask>::eth0:off \
+		 video=HDMI-A-1:1920x1080-32@60
+	# booti 0x40480000 - 0x43000000
+
+5. Features
+===========
+
+Some peripherals and drivers have been tested using the libraries and testcases
+in the imx-lib and imx-test packages. These two packages are included in the 
+Freescale SDK.  You can build them under the Freescale openembedded-core layer of the
+meta-fsl-arm environment. Please reference https://github.com/Freescale/meta-fsl-arm
+for build details.
+
+After the build completes: 
+
+* all testcases are installed to ${fsl_target_rootfs}/unit_tests, 
+* all needed libs are installed to ${fsl_target_rootfs}/usr/lib, 
+* all needed firmware is installed to ${fsl_target_rootfs}/lib/firmware/vpu, 
+  where fsl_target_rootfs parameter points to the path of the root filesystem after 
+  building the freescale SDK.
+
+5.1 HDMI
+--------------
+
+To enable HDMI as the default framebuffer device, add:
+
+	video=HDMI-A-1:1920x1080-32@60
+
+to the bootargs parameter of U-Boot.
+
+5.2 USB feature
+---------------
+
+5.2.1 USB OTG Usage and verification
+------------------------------------
+
+1. Verify the OTG device mode
+
+Plug in cable B and connect to the host machine.
+
+Board configuration:
+
+	# ifconfig usb0 192.168.1.10
+
+Host machine configuration:
+
+	# sudo ifconfig usb0 192.168.1.100
+	# ping 192.168.1.10 -c 2
+	PING 192.168.1.10 (192.168.1.10) 56(84) bytes of data.
+	64 bytes from 192.168.1.10: icmp_req=1 ttl=64 time=2.06 ms
+	64 bytes from 192.168.1.10: icmp_req=2 ttl=64 time=0.286 ms
+	...
+
+2. Switch to OTG host mode
+
+Replace cable B with cable A.
+
+
+5.3 Audio
+---------
+
+5.3.1 Audio capture and playback(WM8962)
+----------------------------------------
+
+1. Capture
+
+Set the parameters to assign the codec and then record an audio message:
+
+	# amixer set 'MIXINR IN3R' on
+	# amixer set 'INPGAR IN3R' on
+
+5.3.2 Audio HDMI playback
+-------------------------
+
+Connect the board to an HDMI display with an HDMI cable,
+then enable fbdev HDMI as in section 5.1, above.
+
+Play the recorded audio messages:
+
+	# aplay -Dhw:1,0 record.wav
+
+
+5.4 Static PM
+-------------
+
+The debug UART can be set as a wakeup source with:
+	# echo enabled > /sys/class/tty/ttymxc0/power/wakeup
+	# echo mem > /sys/power/state
+
+5.5 CPU frequency
+------------------
+
+CPU frequency scaling allows the clock speed of the CPU to be changed on the fly.
+
+	# echo powersave > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+	# cat /proc/cpuinfo

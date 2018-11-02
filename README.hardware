@@ -1,0 +1,151 @@
+i.MX8M Board Support Package
+
+
+Table of Contents
+=================
+
+1. Supported Boards
+2. Change History
+3. BSP Features
+4. BSP Notes
+
+1. Supported Boards
+===================
+
+This BSP supports the following boards:
+
+   + MCIMX8M-EVK   : Board: MCIMX8M-EVK SCH-29615 REV B3, 700-29615 REV X6.
+			 CPU: Freescale i.MX8MQ rev2.0 1500 MHz
+
+2. Change History
+=================
+
+  - 2018/09 (US113230): WRLinux 10.17.41 RCPL14, support MCIMX8M-EVK board.
+		       based on FSL IMX SDK imx_4.9.88_2.0.0_ga
+
+3. BSP Features
+===============
+
+3.1 Supported Features
+======================
+
+This BSP supports the following features.
+
+  o Bus
+	+ I2C: On-Chip I2C controller
+	+ PCIe: On-Chip PCIe controller
+	+ SPI: Freescale QuadSPI bus controller in master mode
+
+  o Network
+	+ Ethernet: FEC 10/100/1000 MAC ethernet controller, Qualcomm AR8031 external PHY
+	+ IEEE 1588: based on FEC controller
+
+  o USB
+	+ USB OTG: On-Chip UTMI transceiver, high/full/low speed
+	+ USB Host: xHCI compatible host controller in the chip
+
+  o Storage
+	+ SD/MMC: On-Chip ultra secured digital host controller (uSDHC)
+	+ eMMC: On-chip 16GB  MTFC16GAKAECN-2M
+	+ NOR Flash: 32MB MT25QL256ABA1EW9 SPI NOR Flash
+
+  o User_Interface_Multimedia
+	+ AUDIO:
+		+ HDMI codec
+		+ WM8524 codec
+
+	+ Backlight
+	+ HDMI: On-Chip HDMI controller
+	+ DCSS: On-Chip image processing unit
+	+ VPU: On-Chip video processing unit (VPU) is the multi-media video processing block
+	+ V4L2 Output: The V4L2 output driver uses the IPU post-processing functions for video output.
+	+ V4L2 Capture
+	+ eLCDIF: Enhanced LCD Interface
+	+ Camera: OV5642 chip
+
+  o Power Mgmt
+	+ CPU Freq
+
+  o GPU
+	+ 3D:
+		+ Vivante GC7000 Lite
+
+  o Misc Devices
+	+ UART: On-Chip High-Speed UART
+	+ Watchdog: On-Chip H/W watchdog timer
+	+ GPIO: On-Chip general purpose Input/Output
+	+ RTC: On-Chip secure real time clock
+	+ Sensors: On-Chip temperature sensor
+	+ SDMA: On-Chip smart direct memory access controller
+	+ PWM: Pulse width modulator
+	+ CAAM (security engine)
+
+3.2 Limited Supported Features
+==============================
+
+	* Graphics/GPU driver (GC7000Lite)
+	* Graphics/userspace libs (OpenGL ES, EGL and OpenVG)
+
+NOTE: WR offers limited support for these Graphics capabilities under the
+specific conditions we have performed validation and testing for. There is
+only GPU driver source code in kernel tree. About userspace libs, because of
+license limitation, there is no source code supplied by WR. If you need deeper
+support, please connect with NXP to get authorization for userspace libs
+source code firstly, and then contact WR Sales team to engage WR Professional
+Services who can work with you to discuss and customize support for your deeper
+graphics requirements.
+
+3.3 Unsupported Features
+========================
+
+The following features are not supported and validated:
+
+	x CortexM4
+	x APBH-Bridge-DMA
+	x Suspend to Memory
+	x eCSPI
+	x GPMI
+	x SPDIF
+
+4. BSP Notes
+============
+
+4.1 Hardware Description
+------------------------
+
+For complete hardware details please refer to the manual/PDF that should have
+accompanied the board.
+
+
+4.2 Target Notes
+----------------
+
+NOTE: This BSP is only validated in the following environment, if used in a
+different environment it may run into unknown issues.
+
+MCIMX8M-EVK:
+	Processor:             IMX8MQ
+	CPU Revision:          rev2.0
+	Board Revision:        MCIMX8M-EVK SCH-29615 REV B3, 700-29615 REV X6
+	BootLoader:            U-Boot
+	BootLoader Version:    U-Boot 2017.03-imx_v2017.03_4.9.88_2.0.0_ga+gb76bb1b
+
+4.3 Specify boot medium
+-----------------------
+
+4.3.1 MCIMX8M-EVK (SCH-29615 REV B3, 700-29615 REV X6)
+--------------------------------------------------
+
+1. Booting from SD card
+
+The following table shows the boot switch setup for SD2 boot
+
+Switch	D1	D2	D3	D4
+SW801	ON	ON	OFF	OFF
+
+2. Booting from eMMC
+
+The following table shows the boot switch settings to boot from eMMC MTFC16GAKAECN-2M.
+
+Switch	D1	D2	D3	D4
+SW801	OFF	OFF	ON	OFF
