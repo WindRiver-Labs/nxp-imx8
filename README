@@ -184,3 +184,29 @@ CPU frequency scaling allows the clock speed of the CPU to be changed on the fly
 
 	# echo powersave > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 	# cat /proc/cpuinfo
+
+
+6. Creating Partitioned Images(WIC)
+===================================
+
+User can use the OpenEmbedded Image Creator, wic, to create the properly
+partitioned image on a SD card. The wic command
+generates partitioned images from existing OpenEmbedded build artifacts.
+User can refer to the below URL to get more WIC details:
+
+http://www.yoctoproject.org/docs/2.2/mega-manual/mega-manual.html#creating-partitioned-images
+
+This BSP supports disk images for SD card.
+After build the project, user will get a WIC image under the directory
+tmp/deploy/images/<bsp name>/ ,such as:
+
+tmp-glibc/deploy/images/nxp-imx8/wrlinux-image-glibc-std-sato-nxp-imx8.wic
+
+Then user can write the output image to a SD card.
+
+6.1 Burn images to SD card
+--------------------------
+
+To burn uboot and WIC images to SD card, user need to execute command:
+
+# dd if=wrlinux-image-glibc-std-sato-nxp-imx8.wic of=/dev/your_sd_dev
