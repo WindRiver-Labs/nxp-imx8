@@ -81,7 +81,14 @@ and are copied to the export directory of the TFTP server.
 4.1.3 Download DTB
 ------------------
 
+	If you want to use HDMI connector (J1001) as output:
 	# tftp 0x43000000 fsl-imx8mq-evk.dtb
+
+	If you want to use IMX-MIPI-HDMI on J1501 as output:
+	# tftp 0x43000000 fsl-imx8mq-evk-dcss-adv7535.dtb
+
+	If you want to use MX8-DSI-OLED1 on J1501 as output:
+	# tftp 0x43000000 fsl-imx8mq-evk-dcss-rm67191.dtb
 
 4.1.4 Set bootargs and boot the system
 --------------------------------------
