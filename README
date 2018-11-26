@@ -192,8 +192,37 @@ CPU frequency scaling allows the clock speed of the CPU to be changed on the fly
 	# echo powersave > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 	# cat /proc/cpuinfo
 
+6. kexec/kdump
+==============
 
-6. Creating Partitioned Images(WIC)
+For discussion purposes, some useful terminology will be described here.
+
+* boot kernel - the first kernel that you start and supports kexec, from U-Boot
+	      for instance
+* capture kernel - the kernel that you reboot into after a boot kernel crash
+
+To build the boot kernel, enable kexec and kdump in your local.conf file:
+
+	WRTEMPLATE = "feature/kexec feature/kdump"
+
+6.1 kdump
+---------
+
+For the boot kernel:
+To reserve a memory region for the capture kernel, you need to pass the bootargs
+argument "crashkernel" to the boot kernel as follow:
+
+	crashkernel=512M@3000M
+
+For the dump-capture kernel:
+Before booting the dump-capture kernel, add "maxcpus=1 cma=128M" to the boot parameter.
+NOTE: Use Image as a secondary kernel. It can be found in the
+tmp-glibc/deploy/images/nxp-imx8/ directory.
+
+For more detailed info about kdump, refer to Documentation/kdump/kdump.txt
+in the kernel source tree.
+
+7. Creating Partitioned Images(WIC)
 ===================================
 
 User can use the OpenEmbedded Image Creator, wic, to create the properly
@@ -211,7 +240,7 @@ tmp-glibc/deploy/images/nxp-imx8/wrlinux-image-glibc-std-sato-nxp-imx8.wic
 
 Then user can write the output image to a SD card.
 
-6.1 Burn images to SD card
+7.1 Burn images to SD card
 --------------------------
 
 To burn uboot and WIC images to SD card, user need to execute command:
