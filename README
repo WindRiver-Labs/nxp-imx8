@@ -102,20 +102,6 @@ and are copied to the export directory of the TFTP server.
 5. Features
 ===========
 
-Some peripherals and drivers have been tested using the libraries and testcases
-in the imx-lib and imx-test packages. These two packages are included in the 
-Freescale SDK.  You can build them under the Freescale openembedded-core layer of the
-meta-fsl-arm environment. Please reference https://github.com/Freescale/meta-fsl-arm
-for build details.
-
-After the build completes: 
-
-* all testcases are installed to ${fsl_target_rootfs}/unit_tests, 
-* all needed libs are installed to ${fsl_target_rootfs}/usr/lib, 
-* all needed firmware is installed to ${fsl_target_rootfs}/lib/firmware/vpu, 
-  where fsl_target_rootfs parameter points to the path of the root filesystem after 
-  building the freescale SDK.
-
 5.1 HDMI
 --------------
 
@@ -152,39 +138,14 @@ Host machine configuration:
 
 Replace cable B with cable A.
 
-
-5.3 Audio
----------
-
-5.3.1 Audio capture and playback(WM8962)
-----------------------------------------
-
-1. Capture
-
-Set the parameters to assign the codec and then record an audio message:
-
-	# amixer set 'MIXINR IN3R' on
-	# amixer set 'INPGAR IN3R' on
-
-5.3.2 Audio HDMI playback
--------------------------
-
-Connect the board to an HDMI display with an HDMI cable,
-then enable fbdev HDMI as in section 5.1, above.
-
-Play the recorded audio messages:
-
-	# aplay -Dhw:1,0 record.wav
-
-
-5.4 Static PM
+5.3 Static PM
 -------------
 
 The debug UART can be set as a wakeup source with:
 	# echo enabled > /sys/class/tty/ttymxc0/power/wakeup
 	# echo mem > /sys/power/state
 
-5.5 CPU frequency
+5.4 CPU frequency
 ------------------
 
 CPU frequency scaling allows the clock speed of the CPU to be changed on the fly.
@@ -243,6 +204,21 @@ Then user can write the output image to a SD card.
 7.1 Burn images to SD card
 --------------------------
 
-To burn uboot and WIC images to SD card, user need to execute command:
+To burn uboot and WIC images to SD card, user need to execute two steps:
+
+1) Burn WIC image
 
 # dd if=wrlinux-image-glibc-std-sato-nxp-imx8.wic of=/dev/your_sd_dev
+
+2) Prepare the bootloader image imx-boot-imx8mqevk-sd.bin. User can build
+   a SDK for imx8mq by executing the commands as below:
+
+$repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-rocko -m imx-4.9.88-2.0.0_ga.xml
+$repo sync
+$DISTRO=fsl-imx-xwayland MACHINE=imx8mqevk source fsl-setup-release.sh -b build-xwayland
+$bitbake fsl-image-qt5-validation-imx
+
+3) The imx-boot-imx8mqevk-sd.bin in SDK can be found in build-xwayland/tmp/deploy/images/imx8mqevk/,
+   and then use the command as below to burn it to SD card:
+
+# dd if=imx-boot-imx8mqevk-sd.bin of=/dev/your_sd_dev bs=1k seek=33 conv=fsync
