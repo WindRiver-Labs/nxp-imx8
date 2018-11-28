@@ -58,10 +58,8 @@ This BSP supports the following features.
 	+ HDMI: On-Chip HDMI controller
 	+ DCSS: On-Chip image processing unit
 	+ VPU: On-Chip video processing unit (VPU) is the multi-media video processing block
-	+ V4L2 Output: The V4L2 output driver uses the IPU post-processing functions for video output.
-	+ V4L2 Capture
-	+ eLCDIF: Enhanced LCD Interface
-	+ Camera: OV5642 chip
+	+ MIPI DSI Host Controller
+	+ MIPI CSI Host Controller
 
   o Power Mgmt
 	+ CPU Freq
@@ -75,10 +73,10 @@ This BSP supports the following features.
 	+ Watchdog: On-Chip H/W watchdog timer
 	+ GPIO: On-Chip general purpose Input/Output
 	+ RTC: On-Chip secure real time clock
-	+ Sensors: On-Chip temperature sensor
+	+ Thermal: Thermal Management Unit (TMU)
 	+ SDMA: On-Chip smart direct memory access controller
-	+ PWM: Pulse width modulator
 	+ CAAM (security engine)
+	+ Suspend to Memory
 
 3.2 Limited Supported Features
 ==============================
@@ -102,10 +100,11 @@ The following features are not supported and validated:
 
 	x CortexM4
 	x APBH-Bridge-DMA
-	x Suspend to Memory
 	x eCSPI
 	x GPMI
 	x SPDIF
+	x PWM
+	x eLCDIF
 
 4. BSP Notes
 ============
