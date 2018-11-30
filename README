@@ -153,6 +153,36 @@ CPU frequency scaling allows the clock speed of the CPU to be changed on the fly
 	# echo powersave > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 	# cat /proc/cpuinfo
 
+5.5 Graphics
+------------
+
+If you want to build a wayland/xwayland distro, please follow the steps as below:
+
+Setup program and create a build directory by using the following arguments:
+
+	--machines nxp-imx8 --distros wrlinux --dl-layers
+
+Setup environment and create a build directory:
+
+	$ . ./environment-setup-<host>-wrlinuxsdk-linux
+	$ . ./oe-init-build-env <build>
+
+Add the following to your local.conf file to configure the project:
+
+	DISTRO ?= "wrlinux-std-sato"
+
+If you want to build an Xwayland image but not an X11 image, add the following line to your local.conf:
+
+	WRTEMPLATE ?= "feature/xwayland-weston-graphics"
+
+If you want to build a wayland image, add the following line to your local.conf:
+
+	WRTEMPLATE ?= "feature/weston-graphics"
+
+Use the command as below to build rootfs:
+
+	bitbake wrlinux-image-glibc-std-sato
+
 6. kexec/kdump
 ==============
 

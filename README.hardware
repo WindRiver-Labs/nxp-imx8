@@ -56,17 +56,13 @@ This BSP supports the following features.
 
 	+ Backlight
 	+ HDMI: On-Chip HDMI controller
-	+ DCSS: On-Chip image processing unit
-	+ VPU: On-Chip video processing unit (VPU) is the multi-media video processing block
+	+ DCSS: Display controller subsystem
 	+ MIPI DSI Host Controller
 	+ MIPI CSI Host Controller
 
   o Power Mgmt
 	+ CPU Freq
-
-  o GPU
-	+ 3D:
-		+ Vivante GC7000 Lite
+	+ Suspend to Memory
 
   o Misc Devices
 	+ UART: On-Chip High-Speed UART
@@ -76,24 +72,8 @@ This BSP supports the following features.
 	+ Thermal: Thermal Management Unit (TMU)
 	+ SDMA: On-Chip smart direct memory access controller
 	+ CAAM (security engine)
-	+ Suspend to Memory
 
-3.2 Limited Supported Features
-==============================
-
-	* Graphics/GPU driver (GC7000Lite)
-	* Graphics/userspace libs (OpenGL ES, EGL and OpenVG)
-
-NOTE: WR offers limited support for these Graphics capabilities under the
-specific conditions we have performed validation and testing for. There is
-only GPU driver source code in kernel tree. About userspace libs, because of
-license limitation, there is no source code supplied by WR. If you need deeper
-support, please connect with NXP to get authorization for userspace libs
-source code firstly, and then contact WR Sales team to engage WR Professional
-Services who can work with you to discuss and customize support for your deeper
-graphics requirements.
-
-3.3 Unsupported Features
+3.2 Unsupported Features
 ========================
 
 The following features are not supported and validated:
@@ -105,18 +85,13 @@ The following features are not supported and validated:
 	x SPDIF
 	x PWM
 	x eLCDIF
+	x VPU: On-Chip video processing unit
+	x GPU: Vivante GC7000 Lite
 
 4. BSP Notes
 ============
 
-4.1 Hardware Description
-------------------------
-
-For complete hardware details please refer to the manual/PDF that should have
-accompanied the board.
-
-
-4.2 Target Notes
+4.1 Target Notes
 ----------------
 
 NOTE: This BSP is only validated in the following environment, if used in a
@@ -129,10 +104,10 @@ MCIMX8M-EVK:
 	BootLoader:            U-Boot
 	BootLoader Version:    U-Boot 2017.03-imx_v2017.03_4.9.88_2.0.0_ga+gb76bb1b
 
-4.3 Specify boot medium
+4.2 Specify boot medium
 -----------------------
 
-4.3.1 MCIMX8M-EVK (SCH-29615 REV B3, 700-29615 REV X6)
+4.2.1 MCIMX8M-EVK (SCH-29615 REV B3, 700-29615 REV X6)
 --------------------------------------------------
 
 1. Booting from SD card
