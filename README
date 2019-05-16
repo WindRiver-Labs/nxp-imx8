@@ -24,7 +24,7 @@ is done automatically when using the Wind River configure wrapper.
 
 License
 -------
-Copyright (C) 2018 Wind River Systems, Inc.
+Copyright (C) 2019 Wind River Systems, Inc.
 
 The right to copy, distribute or otherwise make use of this software may
 be licensed only pursuant to the terms of an applicable Wind River license
@@ -82,13 +82,13 @@ and are copied to the export directory of the TFTP server.
 ------------------
 
 	If you want to use HDMI connector (J1001) as output:
-	# tftp 0x43000000 fsl-imx8mq-evk.dtb
+	# tftp 0x43000000 fsl-imx8mq-evk-b3.dtb
 
 	If you want to use IMX-MIPI-HDMI on J1501 as output:
-	# tftp 0x43000000 fsl-imx8mq-evk-dcss-adv7535.dtb
+	# tftp 0x43000000 fsl-imx8mq-evk-dcss-adv7535-b3.dtb
 
 	If you want to use MX8-DSI-OLED1 on J1501 as output:
-	# tftp 0x43000000 fsl-imx8mq-evk-dcss-rm67191.dtb
+	# tftp 0x43000000 fsl-imx8mq-evk-dcss-rm67191-b3.dtb
 
 4.1.4 Set bootargs and boot the system
 --------------------------------------
@@ -117,7 +117,7 @@ to the bootargs parameter of U-Boot.
 5.2.1 USB OTG Usage and verification
 ------------------------------------
 
-1. Verify the OTG device mode
+1) Verify the OTG device mode
 
 Plug in cable B and connect to the host machine.
 
@@ -134,7 +134,7 @@ Host machine configuration:
 	64 bytes from 192.168.1.10: icmp_req=2 ttl=64 time=0.286 ms
 	...
 
-2. Switch to OTG host mode
+2) Switch to OTG host mode
 
 Replace cable B with cable A.
 
@@ -145,43 +145,145 @@ The debug UART can be set as a wakeup source with:
 	# echo enabled > /sys/class/tty/ttymxc0/power/wakeup
 	# echo mem > /sys/power/state
 
-5.4 CPU frequency
-------------------
+5.4 DMA
+-------
 
-CPU frequency scaling allows the clock speed of the CPU to be changed on the fly.
+In wrlinux project, the version of sdma firmware which comes from linux-firmware
+is 4.2, and there is a newer version 4.4 in the NXP i.mx SDK. Because of license issue,
+the new version firmware can't be integrated into wrlinux product. If customer want to
+use version 4.4 firmware, execute the following commands:
 
-	# echo powersave > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-	# cat /proc/cpuinfo
+1) Download the firmware from URL:
+	$ wget https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-8.0.bin
 
-5.5 Graphics
+2) Extract the firmware from the binary file:
+	$ chmod 777 firmware-imx-8.0.bin
+	$ ./firmware-imx-8.0.bin
+
+3) You need to read and accept the EULA, and press y to continue. Then copy
+firmwares to your rootfs:
+	$ cd firmware-imx-8.0
+	$ cp firmware/sdma/sdma-imx7d.bin path_to_your_rootfs/lib/firmware/sdma/
+
+5.5 Bluetooth
+-------------
+
+Bluetooth functionality is provided by the on-board Murata LBEE5U91CQ-TEMP module
+with QCA6174A chip inside.
+
+5.5.1 Usage and verification
+----------------------------
+To run Bluetooth with BlueZ stack, execute the following commands:
+
+	# hciattach /dev/ttymxc2 qca 3000000 flow -b -t 120
+	# hciconfig hci0 up
+	# hciconfig hci0 noscan
+	# hciconfig hci0
+        Expected UP_RUNNING
+	# hcitool scan --flush
+		Scanning ...
+		<BT_ADDR>       "Another Bluetooth device"
+	# hciconfig hci0 piscan
+
+Service discovery:
+
+	# sdptool browse <BT_ADDR>
+
+Establish connection with another Bluetooth device and ping it:
+
+	# l2ping -c 5 <BT_ADDR>
+
+NOTE: The firmware for bluetooth is not integrated into wrlinux because of
+the license issue. Please execute the following commands to copy firmware to
+rootfs by manual:
+
+1) Download the firmware from URL:
+	$ wget https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/firmware-qca-2.0.3.bin
+
+2) Extract the firmware from the binary file:
+	$ chmod 777 firmware-qca-2.0.3.bin
+	$ ./firmware-qca-2.0.3.bin
+
+3) You need to read and accept the EULA, and press y to continue. Then copy
+firmwares to your rootfs:
+	$ cd firmware-qca-2.0.3
+	$ cp 1CQ_QCA6174A_LEA_2.0/* path_to_your_rootfs/ -rf
+
+4) Please check if the file "rampatch_tlv_3.2.tlv" is in path_to_your_rootfs/lib/firmware.
+
+5.6 Graphics
 ------------
 
-If you want to build a wayland/xwayland distro, please follow the steps as below:
+5.6.1 Xwayland
+--------------
+If you want to build a xwayland image, please follow the steps as below:
 
-Setup program and create a build directory by using the following arguments:
+<1> Setup program and create a build directory by using the following arguments:
 
 	--machines nxp-imx8 --distros wrlinux --dl-layers
 
-Setup environment and create a build directory:
+<2> Setup environment and create a build directory:
 
 	$ . ./environment-setup-<host>-wrlinuxsdk-linux
 	$ . ./oe-init-build-env <build>
 
-Add the following to your local.conf file to configure the project:
+<3> Add the following to your local.conf file to configure the project:
 
 	DISTRO ?= "wrlinux-std-sato"
+	WRTEMPLATE ?= "feature/weston-demo"
 
-If you want to build an Xwayland image but not an X11 image, add the following line to your local.conf:
+<4> Use the command as below to build a xwayland image:
 
-	WRTEMPLATE ?= "feature/xwayland-weston-graphics"
+	bitbake wrlinux-image-glibc-std
 
-If you want to build a wayland image, add the following line to your local.conf:
+5.6.2 GPU
+---------
+Because of the licesen issue, nxp-imx8 layer doesn't integrate imx8's GPU(GC7000Lite) or VPU
+hardware acceleration related packages into WRlinux product. So, if customer wants
+to run hardware graphic feature, please generate graphic with script scripts/generate-graphic-layer.sh.
+Detail steps as below:
+<1> Download SDK package(L4.14.78_1.0.0) with below command:
+	# mkdir imx-yocto-bsp
+	# cd imx-yocto-bsp
+	# repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-sumo -m imx-4.14.78-1.0.0_ga.xml
+	# repo sync
 
-	WRTEMPLATE ?= "feature/weston-graphics"
+<2> Run script scripts/generate-graphic-layer.sh and input correct parameter:
+	# ./generate-graphic-layer.sh -h
+	 Usage: source generate-graphic-layer.sh
+	    Optional parameters: [-s source-dir] [-d destination-dir] [-h]
 
-Use the command as below to build rootfs:
+	    * [-s source-dir]: Source directory where the graphic layer come from
+	    * [-d destination-dir]: Destination directory where the graphic will be merged into
+	    * [-h]: help
 
-	bitbake wrlinux-image-glibc-std-sato
+	# ./generate-graphic-layer.sh -s <nxp-sdk download directory>/imx-yocto-bsp/sources -d <wrlinux project directory>/layer/nxp-imx8/
+
+<3> Read WARNING information carefully, and then input 'y' if you want to generate imx8-graphic layer
+
+Use the command as below to add i.mx8 GPU graphic layer:
+
+	bitbake-layers add-layer path_to_WRLinux_product/layers/nxp-imx8/imx8-graphic
+
+<4> Following the instruction in Section 5.5.1 to build a xwayland image.
+
+NOTE:
+
+1) Now the GPU features are only for xwayland image, if building a sato image with
+imx8-graphic layer, it will fail.
+
+2) You must change the configuration to allow downloading of packages from the
+internet. Change BB_NO_NETWORK ?= "1" to BB_NO_NETWORK ?= "0" in the file
+${buildprj}/conf/local.conf.
+
+3) Since some packages which are used to support the graphic feature in
+nxp-imx8 is provided via binaries, when you build a nxp-imx8 project with
+graphic support, there will be error info as below:
+-----------ERROR--------------
+ERROR: imx-gpu-viv-1_6.2.2.p0-aarch64-r0 do_unpack: To use 'imx-gpu-viv' you need to accept the Freescale EULA at 'path_to_WRLinux_product/layers/meta-freescale/EULA'. Please read it and in case you accept it, write: ACCEPT_FSL_EULA = "1" in your local.conf.
+------------------------------
+Please read the Freescale EULA file carefully, in case you accept it, write:
+ACCEPT_FSL_EULA = "1" to your local.conf file to continue the building.
 
 6. kexec/kdump
 ==============
@@ -207,6 +309,7 @@ argument "crashkernel" to the boot kernel as follow:
 
 For the dump-capture kernel:
 Before booting the dump-capture kernel, add "maxcpus=1 cma=128M" to the boot parameter.
+
 NOTE: Use Image as a secondary kernel. It can be found in the
 tmp-glibc/deploy/images/nxp-imx8/ directory.
 
