@@ -39,7 +39,6 @@ The following BSP features are validated and supported.
 
   o Network
 	+ Ethernet: FEC 10/100/1000 MAC ethernet controller, Qualcomm AR8031 external PHY
-	+ IEEE 1588: based on FEC controller
 
   o USB
 	+ USB OTG: On-Chip UTMI transceiver, high/full/low speed
@@ -81,6 +80,7 @@ The following features are not supported and validated:
 
 	x CortexM4
 	x APBH-Bridge-DMA
+	x IEEE 1588
 	x eCSPI
 	x GPMI
 	x SPDIF

@@ -346,12 +346,12 @@ To burn uboot and WIC images to SD card, user need to execute two steps:
 2) Prepare the bootloader image imx-boot-imx8mqevk-sd.bin. User can build
    a SDK for imx8mq by executing the commands as below:
 
-$repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-rocko -m imx-4.9.88-2.0.0_ga.xml
+$repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-sumo -m imx-4.14.78-1.0.0_ga.xml
 $repo sync
-$DISTRO=fsl-imx-xwayland MACHINE=imx8mqevk source fsl-setup-release.sh -b build-xwayland
+$DISTRO=fsl-imx-wayland MACHINE=imx8mqevk source fsl-setup-release.sh -b build-wayland
 $bitbake fsl-image-qt5-validation-imx
 
-3) The imx-boot-imx8mqevk-sd.bin in SDK can be found in build-xwayland/tmp/deploy/images/imx8mqevk/,
+3) The imx-boot-imx8mqevk-sd.bin in SDK can be found in build-wayland/tmp/deploy/images/imx8mqevk/,
    and then use the command as below to burn it to SD card:
 
 # dd if=imx-boot-imx8mqevk-sd.bin of=/dev/your_sd_dev bs=1k seek=33 conv=fsync
