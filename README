@@ -249,7 +249,7 @@ Detail steps as below:
 	# repo sync
 
 <2> Run script scripts/generate-graphic-layer.sh and input correct parameter:
-	# ./generate-graphic-layer.sh -h
+	# ./scripts/generate-graphic-layer.sh -h
 	 Usage: source generate-graphic-layer.sh
 	    Optional parameters: [-s source-dir] [-d destination-dir] [-h]
 
@@ -257,7 +257,7 @@ Detail steps as below:
 	    * [-d destination-dir]: Destination directory where the graphic will be merged into
 	    * [-h]: help
 
-	# ./generate-graphic-layer.sh -s <nxp-sdk download directory>/imx-yocto-bsp/sources -d <wrlinux project directory>/layer/nxp-imx8/
+	# ./scripts/generate-graphic-layer.sh -s <nxp-sdk download directory>/imx-yocto-bsp/sources -d <wrlinux project directory>/layer/nxp-imx8/
 
 <3> Read WARNING information carefully, and then input 'y' if you want to generate imx8-graphic layer
 
@@ -284,6 +284,22 @@ ERROR: imx-gpu-viv-1_6.2.2.p0-aarch64-r0 do_unpack: To use 'imx-gpu-viv' you nee
 ------------------------------
 Please read the Freescale EULA file carefully, in case you accept it, write:
 ACCEPT_FSL_EULA = "1" to your local.conf file to continue the building.
+
+5.7 thermal
+-----------
+
+	To check current CPU temperature
+	# cd /sys/class/thermal/thermal_zone0
+	# cat temp
+	51000
+	# cat trip_point_0_type
+	passive
+	# cat trip_point_0_temp
+	85000
+	# cat trip_point_1_type
+	critical
+	# cat trip_point_1_temp
+	95000
 
 6. kexec/kdump
 ==============
