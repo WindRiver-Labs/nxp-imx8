@@ -20,8 +20,8 @@ This BSP supports the following boards:
 2. Change History
 =================
 
-  - 2018/09 (US113230): WRLinux 10.17.41 RCPL14, support MCIMX8M-EVK board.
-		       based on FSL IMX SDK imx_4.9.88_2.0.0_ga
+  - 2019/06 (LINUXPG-22): WRL-10.18.44.8, support MCIMX8M-EVK board.
+		       based on FSL IMX SDK v4.14.78
 
 3. BSP Features
 ===============
