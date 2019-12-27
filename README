@@ -1,4 +1,4 @@
-        MCIMX8M-EVK Board Support Package
+        MCIMX8M-EVK/MCIMX8QXP-MEK Board Support Package
 
 1. About this document
 ======================
@@ -76,28 +76,43 @@ and are copied to the export directory of the TFTP server.
 4.1.2 Download kernel
 ---------------------
 
-	# tftp 0x40480000 Image
+	# tftp $kernel_addr Image
 
 4.1.3 Download DTB
 ------------------
-
+For MCIMX8M-EVK board:
 	If you want to use HDMI connector (J1001) as output:
-	# tftp 0x43000000 fsl-imx8mq-evk-b3.dtb
+	# tftp $fdt_addr fsl-imx8mq-evk-b3.dtb
 
 	If you want to use IMX-MIPI-HDMI on J1501 as output:
-	# tftp 0x43000000 fsl-imx8mq-evk-dcss-adv7535-b3.dtb
+	# tftp $fdt_addr fsl-imx8mq-evk-dcss-adv7535-b3.dtb
 
 	If you want to use MX8-DSI-OLED1 on J1501 as output:
-	# tftp 0x43000000 fsl-imx8mq-evk-dcss-rm67191-b3.dtb
+	# tftp $fdt_addr fsl-imx8mq-evk-dcss-rm67191-b3.dtb
+
+For MCIMX8QXP-MEK board:
+	If you want to use HDMI connector J3 as output:
+	# tftp $fdt_addr fsl-imx8qxp-mek.dtb
+
+	If you want to use OV5640 MIPI camera on J2:
+	# tftp $fdt_addr fsl-imx8qxp-mek-mipi-ov5640.dtb
+
+	If you want to use MX8-DSI-OLED1 on J1 as output:
+	# tftp $fdt_addr fsl-imx8qxp-mek-dsi-rm67191.dtb
 
 4.1.4 Set bootargs and boot the system
 --------------------------------------
 
-	# setenv bootargs console=ttymxc0,115200 root=/dev/nfs rw \
+	# setenv bootargs console=<$console_port> root=/dev/nfs rw \
 		 nfsroot=<nfs server>:<nfs root>,v3,tcp \
 		 ip=<target IP>::<gateway>:<netmask>::eth0:off \
 		 video=HDMI-A-1:1920x1080-32@60
-	# booti 0x40480000 - 0x43000000
+	# booti $kernel_addr - $fdt_addr
+
+Note: for MCIMX8QXP-MEK board, $kernel_addr="0x80280000", $fdt_addr="0x83000000"
+	$console_port = "ttyLP0,115200"
+      for MCIMX8M-EVK board, $kernel_addr="0x40480000", $fdt_addr="0x43000000"
+	$console_port = "ttymxc0,115200"
 
 5. Features
 ===========
@@ -165,8 +180,8 @@ firmwares to your rootfs:
 	$ cd firmware-imx-8.0
 	$ cp firmware/sdma/sdma-imx7d.bin path_to_your_rootfs/lib/firmware/sdma/
 
-5.5 Bluetooth
--------------
+5.5 Bluetooth (No MCIMX8QXP-MEK)
+--------------------------------
 
 Bluetooth functionality is provided by the on-board Murata LBEE5U91CQ-TEMP module
 with QCA6174A chip inside.
@@ -359,15 +374,18 @@ To burn uboot and WIC images to SD card, user need to execute two steps:
 
 # dd if=wrlinux-image-glibc-std-sato-nxp-imx8.wic of=/dev/your_sd_dev
 
-2) Prepare the bootloader image imx-boot-imx8mqevk-sd.bin. User can build
-   a SDK for imx8mq by executing the commands as below:
+2) Prepare the bootloader image imx-boot-<$machine>-sd.bin. User can build
+   a SDK to obtain the bootloader by executing the commands as below:
 
 $repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-sumo -m imx-4.14.78-1.0.0_ga.xml
 $repo sync
-$DISTRO=fsl-imx-wayland MACHINE=imx8mqevk source fsl-setup-release.sh -b build-wayland
+$DISTRO=fsl-imx-wayland MACHINE=<$machine> source fsl-setup-release.sh -b build-wayland
 $bitbake fsl-image-qt5-validation-imx
 
-3) The imx-boot-imx8mqevk-sd.bin in SDK can be found in build-wayland/tmp/deploy/images/imx8mqevk/,
+3) The imx-boot-<$machine>-sd.bin in SDK can be found in build-wayland/tmp/deploy/images/<$machine>/,
    and then use the command as below to burn it to SD card:
 
-# dd if=imx-boot-imx8mqevk-sd.bin of=/dev/your_sd_dev bs=1k seek=33 conv=fsync
+# dd if=imx-boot-<$machine>-sd.bin of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
+
+Note: for MCIMX8M-EVK board $machine = "imx8mqevk", seek = "33",
+      for MCIMX8QXP-MEK board $machine = "imx8qxpmek", seek = "32"

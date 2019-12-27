@@ -1,4 +1,4 @@
-i.MX8M Board Support Package
+i.MX8M/i.MX8QXP Board Support Package
 
 
 Table of Contents
@@ -16,11 +16,15 @@ This BSP supports the following boards:
 
    + MCIMX8M-EVK   : Board: MCIMX8M-EVK SCH-29615 REV B3, 700-29615 REV X6.
 			 CPU: Freescale i.MX8MQ rev2.0 1500 MHz
+   + MCIMX8QXP-MEK : Board: MCIMX8QXP-MEK SCH-29683 REV C2, 700-29683 REV C2.
+			 CPU: Freescale i.MX8QXP revB A35 at 1200 MHz
 
 2. Change History
 =================
 
   - 2019/06 (LINUXPG-22): WRL-10.18.44.8, support MCIMX8M-EVK board.
+		       based on FSL IMX SDK v4.14.78
+  - 2020/02 (LINUXEXEC-5329): WRL-10.18.44.14, support MCIMX8QXP-MEK board.
 		       based on FSL IMX SDK v4.14.78
 
 3. BSP Features
@@ -33,7 +37,7 @@ The following BSP features are validated and supported.
 
   o Bus
 	+ I2C: On-Chip I2C controller
-	+ PCIe: On-Chip PCIe controller
+	+ PCIe: On-Chip PCIe controller (No MCIMX8QXP-MEK)
 	+ SPI: Freescale QuadSPI bus controller in master mode
 	+ uSDHC: On-Chip ultra secured digital host controller
 
@@ -43,14 +47,18 @@ The following BSP features are validated and supported.
   o USB
 	+ USB OTG: On-Chip UTMI transceiver, high/full/low speed
 	+ USB Host: xHCI compatible host controller in the chip
+	+ USB Type C: On-chip specified USB3/USB2 OTG module (Only MCIMX8QXP-MEK)
 
   o Storage
-	+ eMMC: On-chip 16GB  MTFC16GAKAECN-2M
-	+ NOR Flash: 32MB MT25QL256ABA1EW9 SPI NOR Flash
+	+ eMMC: On-chip 16GB  MTFC16GAKAECN-2M  (MCIMX8M-EVK)
+	        On-chip 32GB  MTFC32GAKAEEF-AIT (MCIMX8QXP-MEK)
+	+ NOR Flash: 32MB MT25QL256ABA1EW9 SPI NOR Flash (MCIMX8M-EVK)
+	             512MB MT35XU512ABA1G12-0AATES SPI NOR Flash (MCIMX8QXP-MEK)
 
   o Multimedia
 	+ SAI Audio:
-		+ WM8524 codec
+		+ WM8524 codec (MCIMX8M-EVK)
+		+ WM8960 codec (MCIMX8QXP-MEK)
 	+ HDMI: On-Chip HDMI controller
 	+ DCSS: Display controller subsystem
 	+ MIPI DSI Host Controller:
@@ -72,13 +80,16 @@ The following BSP features are validated and supported.
 	+ Thermal: Thermal Management Unit (TMU)
 	+ SDMA: On-Chip smart direct memory access controller
 	+ SEC Engine: CAAM crypto driver
+	+ CortexM4: Only verifed "imx8qx_m4_TCM_rpmsg_lite_str_echo_rtos.bin"
+	            demo installed on CortexM4 side communicated to Cortex A35
+		    with RPMsg of WRLinux. No any other features verifcation on
+		    M4. (Only MCIMX8QXP-MEK)
 
 3.2 Unsupported Features
 ========================
 
 The following features are not supported and validated:
 
-	x CortexM4
 	x APBH-Bridge-DMA
 	x IEEE 1588
 	x eCSPI
@@ -100,6 +111,13 @@ MCIMX8M-EVK:
 	Processor:             IMX8MQ
 	CPU Revision:          rev2.0
 	Board Revision:        MCIMX8M-EVK SCH-29615 REV B3, 700-29615 REV X6
+	BootLoader:            U-Boot
+	BootLoader Version:    U-Boot 2018.03-imx_v2018.03_4.14.78_1.0.0_ga+g7ade5b407f
+
+MCIMX8QXP-MEK:
+	Processor:             IMX8QXP
+	CPU Revision:          revB
+	Board Revision:        MCIMX8QXP-MEK SCH-29683 REV C2, 700-29683 REV C2
 	BootLoader:            U-Boot
 	BootLoader Version:    U-Boot 2018.03-imx_v2018.03_4.14.78_1.0.0_ga+g7ade5b407f
 
