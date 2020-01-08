@@ -336,7 +336,11 @@ For the boot kernel:
 To reserve a memory region for the capture kernel, you need to pass the bootargs
 argument "crashkernel" to the boot kernel as follow:
 
+For MCIMX8M-EVK board:
 	crashkernel=512M@3000M
+
+For MCIMX8QXP-MEK board:
+	crashkernel=512M@0
 
 For the dump-capture kernel:
 Before booting the dump-capture kernel, add "maxcpus=1 cma=128M" to the boot parameter.
