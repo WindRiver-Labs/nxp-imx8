@@ -157,13 +157,18 @@ Replace cable B with cable A.
 -------------
 
 The debug UART can be set as a wakeup source with:
+
+For MCIMX8M-EVK board:
 	# echo enabled > /sys/class/tty/ttymxc0/power/wakeup
+For MCIMX8QXP-MEK board:
+	# echo enabled > /sys/class/tty/ttyLP0/power/wakeup
+
 	# echo mem > /sys/power/state
 
-5.4 DMA
--------
+5.4 DMA & VPU
+-------------
 
-In wrlinux project, the version of sdma firmware which comes from linux-firmware
+In wrlinux project, the version of sdma & vpu firmware which comes from linux-firmware
 is 4.2, and there is a newer version 4.4 in the NXP i.mx SDK. Because of license issue,
 the new version firmware can't be integrated into wrlinux product. If customer want to
 use version 4.4 firmware, execute the following commands:
@@ -179,6 +184,8 @@ use version 4.4 firmware, execute the following commands:
 firmwares to your rootfs:
 	$ cd firmware-imx-8.0
 	$ cp firmware/sdma/sdma-imx7d.bin path_to_your_rootfs/lib/firmware/sdma/
+	$ cp firmware/vpu/vpu_fw_imx8_dec.bin path_to_your_rootfs/lib/firmware/vpu
+	$ cp firmware/vpu/vpu_fw_imx8_enc.bin path_to_your_rootfs/lib/firmware/vpu
 
 5.5 Bluetooth (No MCIMX8QXP-MEK)
 --------------------------------
@@ -315,6 +322,85 @@ ACCEPT_FSL_EULA = "1" to your local.conf file to continue the building.
 	critical
 	# cat trip_point_1_temp
 	95000
+
+5.8 FLEXCAN (MCIMX8QXP-MEK)
+---------------------------
+
+Detail verification commands as below:
+
+	# ip link set can0 up type can bitrate 125000 dbitrate 8000000 fd on
+	# ip link set can1 up type can bitrate 125000 dbitrate 8000000 fd on
+	# candump can0 &
+	# cansend can1 5A1#11.22.33.44.55.66.77.88
+	# ip -d -s link show can0
+	# ip -d -s link show can1
+
+If can0 dumps data from can1, FLEXCAN feature works fine.
+
+5.9 PCIe (MCIMX8QXP-MEK)
+------------------------
+
+The MCIMX8QXP-MEK has only one PCIe interface. It is connected to the M.2
+connecter with E-Key on the MEK Board.
+
+Can choose the below PCIe peripheral to validate:
+
+	Intel Corporation Wireless 7265
+
+Can validate using the following steps:
+
+Simply add line as follows to ${buildprj}/build/conf/local.conf:
+
+	KERNEL_FEATURES_append = " features/iwlwifi/iwlwifi.scc"
+
+This will include the iwlwifi and mac80211 kernel modules in
+the root file system.
+
+Built and install them:
+
+	# bitbake wrlinux-image-glibc-xxx
+
+Copy relevant WiFi card firmware (Intel 7265 WiFi firmware: iwlwifi-7265D-10.ucode)
+of to /lib/firmware of the target image.
+
+Execute the following commands to validate the WiFi cards:
+
+	# ifconfig wlan<idx> up
+	# iw wlan<idx> scan
+	# iw dev wlan<idx> connect <AP essid>
+	# dhclient wlan<idx>
+	# ping <AP address> -i wlan<idx> -c 5
+
+NOTE: the PCIe driver does not support hotplug and suspend/resume.
+
+5.10 CortexM4 (MCIMX8QXP-MEK)
+-----------------------------
+
+The MCIMX8QXP has CortexM4 integrated to SOC, below is how to validate the CortexM4.
+
+1. First need to make a bootable SD card together with U-BOOT to boot CortexA35 &
+CortexM4. About how to make this SD card, please refer to the document
+"Getting Started with MCUXpresso SDK for i.MX 8QuadXPlus", we used demo
+"imx8qx_m4_TCM_rpmsg_lite_str_echo_rtos.bin" as M4 iamge.
+
+2. Second determine COM ports, connect J11 of MCIMX8QXP-MEK board to your host machine,
+run command like:
+	# dmesg | grep ttyUSB
+	usb 2-2.1: FTDI USB Serial Device converter now attached to ttyUSB0
+	usb 2-2.1: FTDI USB Serial Device converter now attached to ttyUSB1
+
+One will be for CortexA35 UART, another for CortexM4 UART.
+
+3. Run RPMsg from WRLinux on Cortex A35 side:
+	# insmod imx_rpmsg_tty.ko
+	imx_rpmsg_tty virtio1.rpmsg-openamp-demo-channel.-1.30: new channel: 0x400 -> 0x1e!
+	Install rpmsg tty driver!
+	rpmsg_tty_cb68 65 6c 6c 6f 20 77 6f 72 6c 64 21              hello world!
+	# echo deadbeaf > /dev/ttyRPMSG30
+
+4. There will be output on Cortex M4 side:
+	#Get Message From Master Side : "hello world!" [len : 12]
+	#Get Message From Master Side : "deadbeaf" [len : 8]
 
 6. kexec/kdump
 ==============

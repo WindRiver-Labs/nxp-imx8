@@ -37,12 +37,13 @@ The following BSP features are validated and supported.
 
   o Bus
 	+ I2C: On-Chip I2C controller
-	+ PCIe: On-Chip PCIe controller (No MCIMX8QXP-MEK)
+	+ PCIe: On-Chip PCIe controller
 	+ SPI: Freescale QuadSPI bus controller in master mode
 	+ uSDHC: On-Chip ultra secured digital host controller
 
   o Network
 	+ Ethernet: FEC 10/100/1000 MAC ethernet controller, Qualcomm AR8031 external PHY
+	+ FLEXCAN: Flexible controller area network (Only MCIMX8QXP-MEK)
 
   o USB
 	+ USB OTG: On-Chip UTMI transceiver, high/full/low speed
@@ -140,3 +141,21 @@ The following table shows the boot switch settings to boot from eMMC MTFC16GAKAE
 
 Switch	D1	D2	D3	D4
 SW801	OFF	OFF	ON	OFF
+
+4.2.2 MCIMX8QXP-MEK (SCH-29683 REV C2, 700-29683 REV C2)
+--------------------------------------------------------
+
+1. Booting from SD card
+
+The following table shows the boot switch setup for SD1 boot
+
+Switch	D1	D2	D3	D4
+SW2	ON	ON	OFF	OFF
+
+2. Booting from eMMC
+
+The following table shows the boot switch settings to boot from eMMC MTFC16GAKAECN-2M.
+
+Switch	D1	D2	D3	D4
+SW2	OFF	ON	OFF	OFF
+
