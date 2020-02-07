@@ -48,7 +48,6 @@ The following BSP features are validated and supported.
   o USB
 	+ USB OTG: On-Chip UTMI transceiver, high/full/low speed
 	+ USB Host: xHCI compatible host controller in the chip
-	+ USB Type C: On-chip specified USB3/USB2 OTG module (Only MCIMX8QXP-MEK)
 
   o Storage
 	+ eMMC: On-chip 16GB  MTFC16GAKAECN-2M  (MCIMX8M-EVK)
@@ -56,7 +55,7 @@ The following BSP features are validated and supported.
 	+ NOR Flash: 32MB MT25QL256ABA1EW9 SPI NOR Flash (MCIMX8M-EVK)
 	             512MB MT35XU512ABA1G12-0AATES SPI NOR Flash (MCIMX8QXP-MEK)
 
-  o Multimedia
+  o Multimedia (Below features except Audio, all others are not validated for MCIMX8QXP-MEK)
 	+ SAI Audio:
 		+ WM8524 codec (MCIMX8M-EVK)
 		+ WM8960 codec (MCIMX8QXP-MEK)
@@ -81,10 +80,6 @@ The following BSP features are validated and supported.
 	+ Thermal: Thermal Management Unit (TMU)
 	+ SDMA: On-Chip smart direct memory access controller
 	+ SEC Engine: CAAM crypto driver
-	+ CortexM4: Only verifed "imx8qx_m4_TCM_rpmsg_lite_str_echo_rtos.bin"
-	            demo installed on CortexM4 side communicated to Cortex A35
-		    with RPMsg of WRLinux. No any other features verifcation on
-		    M4. (Only MCIMX8QXP-MEK)
 
 3.2 Unsupported Features
 ========================
@@ -98,6 +93,8 @@ The following features are not supported and validated:
 	x SPDIF
 	x PWM
 	x eLCDIF
+	x USB Type C (Only MCIMX8QXP-MEK)
+	x CortexM4 (Only MCIMX8QXP-MEK)
 
 4. BSP Notes
 ============
