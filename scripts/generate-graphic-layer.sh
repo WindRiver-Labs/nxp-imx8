@@ -78,10 +78,10 @@ while getopts "s:d:h" fsl_setup_flag
 do
     case $fsl_setup_flag in
         s) GRAPHIC_SRC="$OPTARG";
-           echo "\n Graphic source directory is " $GRAPHIC_SRC
+           echo "Graphic source directory is " $GRAPHIC_SRC
            ;;
         d) GRAPHIC_DST="$OPTARG";
-           echo "\n Graphic destination directory is " $GRAPHIC_DST
+           echo "Graphic destination directory is " $GRAPHIC_DST
            ;;
         h) fsl_setup_help='true';
            ;;
@@ -100,8 +100,6 @@ if test $fsl_setup_help; then
 elif test -z "$GRAPHIC_SRC"; then
     usage && clean_up && exit 1
 elif test -z "$GRAPHIC_DST"; then
-    usage && clean_up && exit 1
-elif test $# -e 0; then
     usage && clean_up && exit 1
 elif test $fsl_setup_error; then
     clean_up && exit 1
@@ -307,5 +305,5 @@ dir_copy meta-fsl-bsp-release/imx/meta-sdk/recipes-graphics/vulkan recipes-graph
 dir_copy poky/meta/recipes-graphics/vulkan/vulkan recipes-graphics/vulkan/
 file_copy poky/meta/recipes-graphics/vulkan/vulkan_1.0.65.2.bb recipes-graphics/vulkan/
 
-echo "\nGraphic layer is generated successfully!"
+echo "Graphic layer is generated successfully!"
 clean_up && exit 1
