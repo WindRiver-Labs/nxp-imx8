@@ -249,7 +249,7 @@ If you want to build a xwayland image, please follow the steps as below:
 	$ . ./environment-setup-<host>-wrlinuxsdk-linux
 	$ . ./oe-init-build-env <build>
 
-<3> Add the following to your local.conf file to configure the project:
+<3> Update the following to your local.conf file to configure the project:
 
 	DISTRO ?= "wrlinux-std-sato"
 	WRTEMPLATE ?= "feature/weston-demo"
@@ -381,7 +381,7 @@ The MCIMX8QXP has CortexM4 integrated to SOC, below is how to validate the Corte
 1. First need to make a bootable SD card together with U-BOOT to boot CortexA35 &
 CortexM4. About how to make this SD card, please refer to the document
 "Getting Started with MCUXpresso SDK for i.MX 8QuadXPlus", we used demo
-"imx8qx_m4_TCM_rpmsg_lite_str_echo_rtos.bin" as M4 iamge.
+"imx8qx_m4_TCM_rpmsg_lite_str_echo_rtos.bin" as M4 image.
 
 2. Second determine COM ports, connect J11 of MCIMX8QXP-MEK board to your host machine,
 run command like:
@@ -392,7 +392,7 @@ run command like:
 One will be for CortexA35 UART, another for CortexM4 UART.
 
 3. Run RPMsg from WRLinux on Cortex A35 side:
-	# insmod imx_rpmsg_tty.ko
+	# modprobe imx_rpmsg_tty.ko
 	imx_rpmsg_tty virtio1.rpmsg-openamp-demo-channel.-1.30: new channel: 0x400 -> 0x1e!
 	Install rpmsg tty driver!
 	rpmsg_tty_cb68 65 6c 6c 6f 20 77 6f 72 6c 64 21              hello world!
