@@ -102,7 +102,7 @@ For MCIMX8QXP-MEK board:
 
 For MCIMX8MMINI-EVK board:
 	If you want to use MX8-DSI-OLED1 on J801 as output:
-	# tftp $fdt_addr Image-fsl-imx8mm-evk-rm67191.dtb
+	# tftp $fdt_addr fsl-imx8mm-evk-rm67191.dtb
 
 4.1.4 Set bootargs and boot the system
 --------------------------------------
