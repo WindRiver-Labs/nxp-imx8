@@ -55,7 +55,7 @@ The following BSP features are validated and supported.
 	+ USB Type C: On-chip specified USB3/USB2 OTG module (Only MCIMX8QXP-MEK)
 
   o Storage
-	+ eMMC: On-chip 16GB  MTFC16GAKAECN-2M  (MCIMX8M-EVK)
+	+ eMMC: On-chip 16GB  MTFC16GAKAECN-2M  (MCIMX8M-EVK MCIMX8MMINI-EVK)
 	        On-chip 32GB  MTFC32GAKAEEF-AIT (MCIMX8QXP-MEK)
 	+ NOR Flash: 32MB MT25QL256ABA1EW9 SPI NOR Flash (MCIMX8M-EVK)
 	             512MB MT35XU512ABA1G12-0AATES SPI NOR Flash (MCIMX8QXP-MEK)
