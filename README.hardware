@@ -1,4 +1,4 @@
-i.MX8M/i.MX8QXP/i.MX8MMINI Board Support Package
+i.MX8M/i.MX8QXP/i.MX8MMINI/i.MX8QM Board Support Package
 
 
 Table of Contents
@@ -19,7 +19,10 @@ This BSP supports the following boards:
    + MCIMX8QXP-MEK : Board: MCIMX8QXP-MEK SCH-29683 REV C2, 700-29683 REV C2.
 			 CPU: Freescale i.MX8QXP revB A35 at 1200 MHz
    + MCIMX8MMINI-EVK : Board: MCIMX8MMINI-EVK SCH-31407 REV C3, 700-31407 REV A2.
-                         CPU: Freescale i.MX8MMQ rev1.0 1800 MHz
+			 CPU: Freescale i.MX8MMQ rev1.0 1800 MHz
+   + MCIMX8QM-MEK : Board: MCIMX8QXP-MEK SCH-29420 REV C2, 700-29420 REV C2.
+			 CPU: Freescale i.MX8QM rev1.0 at 1200 MHz
+
 
 2. Change History
 =================
@@ -29,7 +32,9 @@ This BSP supports the following boards:
   - 2020/02 (LINUXPG-247): WRL-10.18.44.14, support MCIMX8QXP-MEK board.
 		       based on FSL IMX SDK v4.14.78
   - 2020/02 (LINUXPG-227): WRL-10.18.44.15, support MCIMX8MMINI-EVK board.
-                       based on FSL IMX SDK v4.14.78
+		       based on FSL IMX SDK v4.14.78
+  - 2020/03 (LINUXPG-165): WRL-10.18.44.16, support MCIMX8QM-MEK board.
+		       based on FSL IMX SDK v4.14.78
 
 3. BSP Features
 ===============
@@ -56,14 +61,15 @@ The following BSP features are validated and supported.
 
   o Storage
 	+ eMMC: On-chip 16GB  MTFC16GAKAECN-2M  (MCIMX8M-EVK MCIMX8MMINI-EVK)
-	        On-chip 32GB  MTFC32GAKAEEF-AIT (MCIMX8QXP-MEK)
+	        On-chip 32GB  MTFC32GAKAEEF-AIT (MCIMX8QXP-MEK MCIMX8QM-MEK)
 	+ NOR Flash: 32MB MT25QL256ABA1EW9 SPI NOR Flash (MCIMX8M-EVK)
 	             512MB MT35XU512ABA1G12-0AATES SPI NOR Flash (MCIMX8QXP-MEK)
-		     32MB MT25QU256ABA1EW7 SPI NOR Flash (MCIMX8MMINI-EVK)
+	             32MB MT25QU256ABA1EW7 SPI NOR Flash (MCIMX8MMINI-EVK)
+	             64MB MT35XU512ABA1G12 SPI NOR Flash (MCIMX8QM-MEK)
 
   o Multimedia
 	+ SAI Audio:
-		+ WM8524 codec (MCIMX8M-EVK and MCIMX8MMINI-EVK)
+		+ WM8524 codec (MCIMX8M-EVK MCIMX8MMINI-EVK MCIMX8QM-MEK)
 		+ WM8960 codec (MCIMX8QXP-MEK)
 	+ HDMI: On-Chip HDMI controller
 	+ DCSS: Display controller subsystem
@@ -134,6 +140,14 @@ MCIMX8MMINI-EVK:
         BootLoader:            U-Boot
         BootLoader Version:    U-Boot 2018.03-imx_v2018.03_4.14.78_1.0.0_ga+g7ade5b407f
 
+MCIMX8QM-MEK:
+	Processor:             IMX8QM-MEK
+	CPU Revision:          rev1.0
+	Board Revision:        MCIMX8MMINI-EVK SCH-29420 REV C2, 700-29420 REV C2
+	BootLoader:            U-Boot
+	BootLoader Version:    U-Boot 2018.03-imx_v2018.03_4.14.78_1.0.0_ga+g7ade5b407f
+
+
 4.2 Specify boot medium
 -----------------------
 
@@ -189,4 +203,21 @@ The following table shows the boot switch settings to boot from eMMC MTFC16GAKAE
 Switch  D1      D2      D3      D4      D5      D6      D7      D8      D9      D10
 SW1     OFF     ON      ON      OFF     ON      ON      OFF     OFF     OFF     ON
 SW2     OFF     OFF     OFF     ON      OFF     ON      OFF     ON      OFF     OFF
+
+4.2.3 MCIMX8QM-MEK (SCH-29420 REV C2, 700-29420 REV C2)
+--------------------------------------------------------
+
+1. Booting from SD card
+
+The following table shows the boot switch setup for SD1 boot
+
+Switch  D1      D2      D3      D4      D5      D6
+SW2     OFF     OFF     ON      ON      OFF     OFF
+
+2. Booting from eMMC
+
+The following table shows the boot switch settings to boot from eMMC MTFC16GAKAECN-2M.
+
+Switch  D1      D2      D3      D4      D5      D6
+SW2     OFF     OFF     OFF     ON      OFF     OFF
 
