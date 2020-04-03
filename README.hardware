@@ -57,7 +57,7 @@ The following BSP features are validated and supported.
   o USB
 	+ USB OTG: On-Chip UTMI transceiver, high/full/low speed
 	+ USB Host: xHCI compatible host controller in the chip
-	+ USB Type C: On-chip specified USB3/USB2 OTG module (Only MCIMX8QXP-MEK)
+	+ USB Type C: On-chip specified USB3/USB2 OTG module
 
   o Storage
 	+ eMMC: On-chip 16GB  MTFC16GAKAECN-2M  (MCIMX8M-EVK MCIMX8MMINI-EVK)
