@@ -1,4 +1,4 @@
-        MCIMX8M-EVK/MCIMX8QXP-MEK/MCIMX8MMINI-EVK/MCIMX8QM-MEK Board Support Package
+        MCIMX8M-EVK Board Support Package
 
 1. About this document
 ======================
@@ -24,7 +24,7 @@ is done automatically when using the Wind River configure wrapper.
 
 License
 -------
-Copyright (C) 2019 Wind River Systems, Inc.
+Copyright (C) 2020 Wind River Systems, Inc.
 
 The right to copy, distribute or otherwise make use of this software may
 be licensed only pursuant to the terms of an applicable Wind River license
@@ -90,24 +90,6 @@ For MCIMX8M-EVK board:
 	If you want to use MX8-DSI-OLED1 on J1501 as output:
 	# tftp $fdt_addr fsl-imx8mq-evk-dcss-rm67191-b3.dtb
 
-For MCIMX8QXP-MEK board:
-	If you want to use HDMI connector J3 as output:
-	# tftp $fdt_addr fsl-imx8qxp-mek.dtb
-
-	If you want to use OV5640 MIPI camera on J2:
-	# tftp $fdt_addr fsl-imx8qxp-mek-mipi-ov5640.dtb
-
-	If you want to use MX8-DSI-OLED1 on J1 as output:
-	# tftp $fdt_addr fsl-imx8qxp-mek-dsi-rm67191.dtb
-
-For MCIMX8MMINI-EVK board:
-	If you want to use MX8-DSI-OLED1 on J801 as output:
-	# tftp $fdt_addr fsl-imx8mm-evk-rm67191.dtb
-
-For MCIMX8QM-MEK board:
-	If you want to use OV5640 MIPI camera on J4:
-	# tftp $fdt_addr fsl-imx8qm-mek-inmate.dtb
-
 4.1.4 Set bootargs and boot the system
 --------------------------------------
 
@@ -117,14 +99,9 @@ For MCIMX8QM-MEK board:
 		 video=HDMI-A-1:1920x1080-32@60
 	# booti $kernel_addr - $fdt_addr
 
-Note: for MCIMX8QXP-MEK board, $kernel_addr="0x80280000", $fdt_addr="0x83000000"
-	$console_port = "ttyLP0,115200"
-      for MCIMX8M-EVK board, $kernel_addr="0x40480000", $fdt_addr="0x43000000"
+Note: for MCIMX8M-EVK board, $kernel_addr="0x40480000", $fdt_addr="0x43000000"
 	$console_port = "ttymxc0,115200"
-      for MCIMX8MMINI-EVK board, $kernel_addr="0x40480000", $fdt_addr="0x43000000"
-	$console_port = "ttymxc1,115200"
-      for MCIMX8QM-MEK board, $kernel_addr="0x80280000", $fdt_addr="0x83000000"
-	$console_port = "ttyLP0,115200"
+
 
 5. Features
 ===========
@@ -186,15 +163,15 @@ the new version firmware can't be integrated into wrlinux product. If customer w
 use version 4.4 firmware, execute the following commands:
 
 1) Download the firmware from URL:
-	$ wget https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-8.0.bin
+	$ wget https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-8.5.bin
 
 2) Extract the firmware from the binary file:
-	$ chmod 777 firmware-imx-8.0.bin
-	$ ./firmware-imx-8.0.bin
+	$ chmod 777 firmware-imx-8.5.bin
+	$ ./firmware-imx-8.5.bin
 
 3) You need to read and accept the EULA, and press y to continue. Then copy
 firmwares to your rootfs:
-	$ cd firmware-imx-8.0
+	$ cd firmware-imx-8.5
 	$ cp firmware/sdma/sdma-imx7d.bin path_to_your_rootfs/lib/firmware/sdma/
 	$ cp firmware/vpu/vpu_fw_imx8_dec.bin path_to_your_rootfs/lib/firmware/vpu
 	$ cp firmware/vpu/vpu_fw_imx8_enc.bin path_to_your_rootfs/lib/firmware/vpu
@@ -232,15 +209,15 @@ the license issue. Please execute the following commands to copy firmware to
 rootfs by manual:
 
 1) Download the firmware from URL:
-	$ wget https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/firmware-qca-2.0.3.bin
+	$ wget https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/firmware-qca-3.0.1.bin
 
 2) Extract the firmware from the binary file:
-	$ chmod 777 firmware-qca-2.0.3.bin
-	$ ./firmware-qca-2.0.3.bin
+	$ chmod 777 firmware-qca-3.0.1.bin
+	$ ./firmware-qca-3.0.1.bin
 
 3) You need to read and accept the EULA, and press y to continue. Then copy
 firmwares to your rootfs:
-	$ cd firmware-qca-2.0.3
+	$ cd firmware-qca-3.0.1
 	$ cp 1CQ_QCA6174A_LEA_2.0/* path_to_your_rootfs/ -rf
 
 4) Please check if the file "rampatch_tlv_3.2.tlv" is in path_to_your_rootfs/lib/firmware.
@@ -276,10 +253,10 @@ Because of the licesen issue, nxp-imx8 layer doesn't integrate imx8's GPU(GC7000
 hardware acceleration related packages into WRlinux product. So, if customer wants
 to run hardware graphic feature, please generate graphic with script scripts/generate-graphic-layer.sh.
 Detail steps as below:
-<1> Download SDK package(L4.14.78_1.0.0) with below command:
+<1> Download SDK package(L4.19.35-1.1.0) with below command:
 	# mkdir imx-yocto-bsp
 	# cd imx-yocto-bsp
-	# repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-sumo -m imx-4.14.78-1.0.0_ga.xml
+	# repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-warrior -m imx-4.19.35-1.1.0.xml
 	# repo sync
 
 <2> Run script scripts/generate-graphic-layer.sh and input correct parameter:
@@ -335,22 +312,8 @@ ACCEPT_FSL_EULA = "1" to your local.conf file to continue the building.
 	# cat trip_point_1_temp
 	95000
 
-5.8 FLEXCAN (MCIMX8QXP-MEK)
----------------------------
-
-Detail verification commands as below:
-
-	# ip link set can0 up type can bitrate 125000 dbitrate 8000000 fd on
-	# ip link set can1 up type can bitrate 125000 dbitrate 8000000 fd on
-	# candump can0 &
-	# cansend can1 5A1#11.22.33.44.55.66.77.88
-	# ip -d -s link show can0
-	# ip -d -s link show can1
-
-If can0 dumps data from can1, FLEXCAN feature works fine.
-
-5.9 PCIe (No MCIMX8M-EVK)
-------------------------
+5.8 PCIe
+--------
 
 The MCIMX8QXP-MEK has only one PCIe interface. It is connected to the M.2
 connecter with E-Key on the MEK Board.
@@ -385,34 +348,6 @@ Execute the following commands to validate the WiFi cards:
 
 NOTE: the PCIe driver does not support hotplug and suspend/resume.
 
-5.10 CortexM4 (MCIMX8QXP-MEK)
------------------------------
-
-The MCIMX8QXP has CortexM4 integrated to SOC, below is how to validate the CortexM4.
-
-1. First need to make a bootable SD card together with U-BOOT to boot CortexA35 &
-CortexM4. About how to make this SD card, please refer to the document
-"Getting Started with MCUXpresso SDK for i.MX 8QuadXPlus", we used demo
-"imx8qx_m4_TCM_rpmsg_lite_str_echo_rtos.bin" as M4 image.
-
-2. Second determine COM ports, connect J11 of MCIMX8QXP-MEK board to your host machine,
-run command like:
-	# dmesg | grep ttyUSB
-	usb 2-2.1: FTDI USB Serial Device converter now attached to ttyUSB0
-	usb 2-2.1: FTDI USB Serial Device converter now attached to ttyUSB1
-
-One will be for CortexA35 UART, another for CortexM4 UART.
-
-3. Run RPMsg from WRLinux on Cortex A35 side:
-	# modprobe imx_rpmsg_tty.ko
-	imx_rpmsg_tty virtio1.rpmsg-openamp-demo-channel.-1.30: new channel: 0x400 -> 0x1e!
-	Install rpmsg tty driver!
-	rpmsg_tty_cb68 65 6c 6c 6f 20 77 6f 72 6c 64 21              hello world!
-	# echo deadbeaf > /dev/ttyRPMSG30
-
-4. There will be output on Cortex M4 side:
-	#Get Message From Master Side : "hello world!" [len : 12]
-	#Get Message From Master Side : "deadbeaf" [len : 8]
 
 6. kexec/kdump
 ==============
@@ -436,15 +371,6 @@ argument "crashkernel" to the boot kernel as follow:
 
 For MCIMX8M-EVK board:
 	crashkernel=512M@3000M
-
-For MCIMX8QXP-MEK board:
-	crashkernel=512M@0
-
-For MCIMX8MMINI-EVK board:
-	crashkernel=256M
-
-For MCIMX8QM-MEK board:
-	crashkernel=256M
 
 For the dump-capture kernel:
 Before booting the dump-capture kernel, add "maxcpus=1 cma=128M" to the boot parameter.
@@ -485,7 +411,7 @@ To burn uboot and WIC images to SD card, user need to execute two steps:
 2) Prepare the bootloader image imx-boot-<$machine>-sd.bin. User can build
    a SDK to obtain the bootloader by executing the commands as below:
 
-$repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-sumo -m imx-4.14.78-1.0.0_ga.xml
+$repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-warrior -m imx-4.19.35-1.1.0.xml
 $repo sync
 $DISTRO=fsl-imx-wayland MACHINE=<$machine> source fsl-setup-release.sh -b build-wayland
 $bitbake fsl-image-qt5-validation-imx
@@ -495,5 +421,4 @@ $bitbake fsl-image-qt5-validation-imx
 
 # dd if=imx-boot-<$machine>-sd.bin of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
 
-Note: for MCIMX8M-EVK board $machine = "imx8mqevk", seek = "33",
-      for MCIMX8QXP-MEK board $machine = "imx8qxpmek", seek = "32"
+Note: for MCIMX8M-EVK board $machine = "imx8mqevk", seek = "33"
