@@ -253,10 +253,10 @@ Because of the licesen issue, nxp-imx8 layer doesn't integrate imx8's GPU(GC7000
 hardware acceleration related packages into WRlinux product. So, if customer wants
 to run hardware graphic feature, please generate graphic with script scripts/generate-graphic-layer.sh.
 Detail steps as below:
-<1> Download SDK package(L4.19.35-1.1.0) with below command:
+<1> Download SDK package(L5.4.3-1.0.0) with below command:
 	# mkdir imx-yocto-bsp
 	# cd imx-yocto-bsp
-	# repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-warrior -m imx-4.19.35-1.1.0.xml
+	# repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-zeus -m imx-5.4.3-1.0.0.xml
 	# repo sync
 
 <2> Run script scripts/generate-graphic-layer.sh and input correct parameter:
@@ -276,7 +276,7 @@ Use the command as below to add i.mx8 GPU graphic layer:
 
 	bitbake-layers add-layer path_to_WRLinux_product/layers/nxp-imx8/imx8-graphic
 
-<4> Following the instruction in Section 5.5.1 to build a xwayland image.
+<4> Following the instruction in Section 5.6.1 to build a xwayland image.
 
 NOTE:
 
@@ -291,7 +291,7 @@ ${buildprj}/conf/local.conf.
 nxp-imx8 is provided via binaries, when you build a nxp-imx8 project with
 graphic support, there will be error info as below:
 -----------ERROR--------------
-ERROR: imx-gpu-viv-1_6.2.2.p0-aarch64-r0 do_unpack: To use 'imx-gpu-viv' you need to accept the Freescale EULA at 'path_to_WRLinux_product/layers/meta-freescale/EULA'. Please read it and in case you accept it, write: ACCEPT_FSL_EULA = "1" in your local.conf.
+ERROR: imx-gpu-viv-6.4.0.p2.0-aarch64-r0 do_unpack: To use 'imx-gpu-viv' you need to accept the Freescale EULA at 'path_to_WRLinux_product/layers/meta-freescale/EULA'. Please read it and in case you accept it, write: ACCEPT_FSL_EULA = "1" in your local.conf.
 ------------------------------
 Please read the Freescale EULA file carefully, in case you accept it, write:
 ACCEPT_FSL_EULA = "1" to your local.conf file to continue the building.
