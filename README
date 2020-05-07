@@ -246,7 +246,7 @@ If you want to build a xwayland image, please follow the steps as below:
 
 <1> Setup program and create a build directory by using the following arguments:
 
-	--machines nxp-imx8 --distros wrlinux --dl-layers
+	--machines nxp-imx8 --distros wrlinux-graphics --dl-layers
 
 <2> Setup environment and create a build directory:
 
@@ -255,12 +255,11 @@ If you want to build a xwayland image, please follow the steps as below:
 
 <3> Update the following to your local.conf file to configure the project:
 
-	DISTRO ?= "wrlinux-std-sato"
 	WRTEMPLATE ?= "feature/weston-demo"
 
 <4> Use the command as below to build a xwayland image:
 
-	bitbake wrlinux-image-glibc-std
+	bitbake wrlinux-image-std-sato
 
 5.6.2 GPU
 ---------
@@ -410,7 +409,7 @@ This BSP supports disk images for SD card.
 After build the project, user will get a WIC image under the directory
 tmp/deploy/images/<bsp name>/ ,such as:
 
-tmp-glibc/deploy/images/nxp-imx8/wrlinux-image-glibc-std-sato-nxp-imx8.wic
+tmp-glibc/deploy/images/nxp-imx8/wrlinux-image-<std-sato/std>-nxp-imx8.wic
 
 Then user can write the output image to a SD card.
 
@@ -421,19 +420,27 @@ To burn uboot and WIC images to SD card, user need to execute two steps:
 
 1) Burn WIC image
 
-# dd if=wrlinux-image-glibc-std-sato-nxp-imx8.wic of=/dev/your_sd_dev
+# dd if=wrlinux-image-<std-sato/std>-nxp-imx8.wic of=/dev/your_sd_dev
 
 2) Prepare the bootloader image imx-boot-<$machine>-sd.bin. User can build
    a SDK to obtain the bootloader by executing the commands as below:
 
 $repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-warrior -m imx-4.19.35-1.1.0.xml
 $repo sync
-$DISTRO=fsl-imx-wayland MACHINE=<$machine> source fsl-setup-release.sh -b build-wayland
-$bitbake fsl-image-qt5-validation-imx
+$DISTRO=fsl-imx-xwayland MACHINE=imx8mqevk source fsl-setup-release.sh -b build-xwayland
+$bitbake imx-boot
 
 3) The imx-boot-<$machine>-sd.bin in SDK can be found in build-wayland/tmp/deploy/images/<$machine>/,
    and then use the command as below to burn it to SD card:
 
-# dd if=imx-boot-<$machine>-sd.bin of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
+# dd if=imx-boot-<$machine>-sd.bin-flash_evk of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
 
 Note: for MCIMX8M-EVK board $machine = "imx8mqevk", seek = "33"
+
+4) Set environment variable for booting system
+
+u-boot=>setenv fdt_file fsl-imx8mq-evk-b3.dtb
+u-boot=>setenv bootfile Image
+u-boot=>setenv bootargs 'root=/dev/mmcblk1p2 rw rootdelay=5 console=ttymxc0,115200n8 ip=dhcp'
+u-boot=>setenv bootcmd 'fatload mmc 1:1 $loadaddr $bootfile; fatload mmc 1:1 $fdt_addr $fdt_file; booti $loadaddr - $fdt_addr';
+u-boot=>run bootcmd
