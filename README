@@ -114,9 +114,10 @@ For MCIMX8M-EVK board:
 		 video=HDMI-A-1:1920x1080-32@60
 	# booti $kernel_addr - $fdt_addr
 
-Note: for MCIMX8M-EVK board, $kernel_addr="0x40480000", $fdt_addr="0x43000000"
+Note: For MCIMX8M-EVK board, $kernel_addr="0x40480000", $fdt_addr="0x44000000"
 	$console_port = "ttymxc0,115200"
-
+      The kernel image will become larger if more kernel code is compiled into kernel image.
+      So, please increase "fdt_addr" value by putting dtb file at higher address if you encounter with kernel booting failed.
 
 5. Features
 ===========
