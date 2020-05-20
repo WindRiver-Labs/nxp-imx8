@@ -314,14 +314,48 @@ file_copy recipes-graphics/imx-gpu-sdk/imx-gpu-sdk_5.4.0.bb \
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv/Add-dummy-libgl.patch
-file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv_6.4.0.p2.0-aarch64.bb
-file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv-v6.inc
+file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv_6.4.0.p2.0-aarch64.bb \
+			"s/fd4b227530cd88a82af6a5982cfb724d/6c12031a11b81db21cdfe0be88cac4b3/g" \
+			"s/f4005a4a2dba6a79d8f25547612aa3b9/7c2f504897e6b4495433546ab7d27912/g" \
+			"s/148e1b1a9e382a8159d5763dd2b08caad008eb931f3d925ac901c2438440d508/45852a5c3c61a9215a2ffb7387a6e1cce7ddac6f12513fc77459ad7e1f1b3a27/g"
+mv $GRAPHIC_DTS/imx8-graphic/recipes-graphics/imx-gpu-viv/imx-gpu-viv_6.4.0.p2.0-aarch64.bb \
+	 $GRAPHIC_DTS/imx8-graphic/recipes-graphics/imx-gpu-viv/imx-gpu-viv_6.4.0.p1.0-aarch64.bb
+file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv-v6.inc \
+			"s/libnn-imx libnn-imx-dev/libnn-imx/g" \
+			"12iGLES3_HEADER_REMOVALS_mx8qxp_remove = \"gl32.h\"" \
+			"16iFILES_libvulkan-imx = \"\${libdir}/vulkan/libvulkan_VSI\${SOLIBS} \${libdir}/libSPIRV_viv\${SOLIBS}\"" \
+			"s/nnrt/NNRT/g" \
+			"/FILES_libvulkan-imx/G" \
+			"25d" \
+			"25iFILES_libopencl-imx = \"\${libdir}/libOpenCL\${SOLIBS} \\\ " \
+			"26i\                       \${libdir}/libVivanteOpenCL\${SOLIBS} \\\ " \
+			"27i\                       \${libdir}/libLLVM_viv\${SOLIBS} \\\ " \
+			"28i\                       \${sysconfdir}/OpenCL/vendors/Vivante.icd\"" \
+			"s/\\\ /\\\/g"
+
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv-6.inc \
 			"s/'DISTRO_FEATURES', 'wayland'/'DISTRO_FEATURES', 'weston-demo'/g" \
 			"s/\"DISTRO_FEATURES\", \"wayland\"/\"DISTRO_FEATURES\", \"weston-demo\"/g" \
 			"/RDEPENDS_libgal-imx/d" \
+			"s/2017-2019/2017-2018/g" \
+			"s/80c0478f4339af024519b3723023fe28/5ab1a30d0cd181e3408077727ea5a2db/g" \
+			"s/GLES3_HEADER_REMOVALS_mx8qxp = \"\"/GLES3_HEADER_REMOVALS_mx8qxp = \"gl32.h\"/g" \
+			"s/from vulkan-headers/from vulkan/g" \
+			"237,240d" \
+			"237i\        # Install the vulkan driver in a sub-folder. When installed in the same" \
+			"238i\        # folder as the vulkan loader layer library, an incorrect linkage is" \
+			"239i\        # created from libvulkan.so.1 to our library instead of the loader" \
+			"240i\        # layer library." \
+			"241i\        install -d \${D}\${libdir}/vulkan" \
+			"242i\        patchelf --set-soname libvulkan_VSI.so.1 \${D}\${libdir}/libvulkan-\${backend}.so" \
+			"243i\        mv \${D}\${libdir}/libvulkan-\${backend}.so \${D}\${libdir}/vulkan/libvulkan_VSI.so" \
+			"311,312d" \
+			"311iFILES_libvulkan-imx = \"\${libdir}/vulkan/libvulkan_VSI\${SOLIBS}\"" \
+			"312iFILES_libvulkan-imx-dev = \"\${includedir}/vulkan \${libdir}/vulkan/libvulkan_VSI\${SOLIBSDEV}\"" \
+			"313iINSANE_SKIP_libvulkan-imx += \"dev-deps dev-so\"" \
+			"344d"
 
 
 file_copy recipes-graphics/mesa/mesa_%.bbappend \
