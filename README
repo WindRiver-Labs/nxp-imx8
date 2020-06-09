@@ -105,7 +105,36 @@ For MCIMX8M-EVK board:
 	If you want to use MX8-DSI-OLED1 on J1501 as output:
 	# tftp $fdt_addr fsl-imx8mq-evk-dcss-rm67191-b3.dtb
 
-4.1.4 Set bootargs and boot the system
+For MCIMX8QM-MEK board:
+	If you want to connect HDMI monitor to MIPI DSI1(J4) or DSI0(J9):
+	# tftp $fdt_addr fsl-imx8qm-mek.dtb
+
+	If you want to connect HDMI monitor to HDMI TX (J6):
+	# tftp $fdt_addr fsl-imx8qm-mek-hdmi.dtb
+
+	If you want to connect 2 HDMI monitors to HDMI TX (J6) and HDMI RX (J1):
+	# tftp $fdt_addr fsl-imx8qm-mek-hdmi-in.dtb
+
+	If you want to connect OLED screen to MIPI DSI1(J4) or DSI0(J9):
+	# tftp $fdt_addr fsl-imx8qm-mek-dsi-rm67191.dtb
+
+	If you want to connect OV5640 MIPI camera to MIPI CSI1(J5) or CSI0(J10):
+	# tftp $fdt_addr fsl-imx8qm-mek-ov5640.dtb
+
+4.1.4 Download and load firmware
+--------------------------------
+For MCIMX8QM-MEK board:
+	If you want to connect HDMI monitor to HDMI TX (J6):
+	# tftp ${hdp_addr} hdmitxfw.bin
+	# hdp load ${hdp_addr}
+
+	If you want to connect 2 HDMI monitors to HDMI TX (J6) and HDMI RX (J1):
+	# tftp ${hdp_addr} hdmitxfw.bin
+	# hdp load ${hdp_addr}
+	# tftp ${hdprx_addr} hdmirxfw.bin
+	# hdprx load ${hdprx_addr}
+
+4.1.5 Set bootargs and boot the system
 --------------------------------------
 
 	# setenv bootargs console=<$console_port> root=/dev/nfs rw \
@@ -116,14 +145,17 @@ For MCIMX8M-EVK board:
 
 Note: For MCIMX8M-EVK board, $kernel_addr="0x40480000", $fdt_addr="0x44000000"
 	$console_port = "ttymxc0,115200"
+      for MCIMX8QM-MEK board, $kernel_addr="0x80280000", $fdt_addr="0x83000000"
+	$console_port = "ttyLP0,115200"
       The kernel image will become larger if more kernel code is compiled into kernel image.
       So, please increase "fdt_addr" value by putting dtb file at higher address if you encounter with kernel booting failed.
+
 
 5. Features
 ===========
 
 5.1 HDMI
---------------
+--------
 
 To enable HDMI as the default framebuffer device, add:
 
@@ -387,6 +419,9 @@ argument "crashkernel" to the boot kernel as follow:
 For MCIMX8M-EVK board:
 	crashkernel=512M@3000M
 
+For MCIMX8QM-MEK board:
+	crashkernel=256M
+
 For the dump-capture kernel:
 Before booting the dump-capture kernel, add "maxcpus=1 cma=128M" to the boot parameter.
 
@@ -434,9 +469,17 @@ $bitbake imx-boot
 3) The imx-boot-<$machine>-sd.bin in SDK can be found in build-wayland/tmp/deploy/images/<$machine>/,
    and then use the command as below to burn it to SD card:
 
-# dd if=imx-boot-<$machine>-sd.bin-flash_evk of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
+For MCIMX8M-EVK board:
 
-Note: for MCIMX8M-EVK board $machine = "imx8mqevk", seek = "33"
+	# dd if=imx-boot-<$machine>-sd.bin-flash_evk of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
+
+Note: $machine = "imx8mqevk", seek = "33"
+
+For MCIMX8QM-MEK board:
+
+	# dd if=imx-boot-<$machine>-sd.bin-flash_linux_m4 of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
+
+Note: $machine = "imx8qmmek", seek = "32"
 
 4) Set environment variable for booting system
 
