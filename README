@@ -488,3 +488,58 @@ u-boot=>setenv bootfile Image
 u-boot=>setenv bootargs 'root=/dev/mmcblk1p2 rw rootdelay=5 console=ttymxc0,115200n8 ip=dhcp'
 u-boot=>setenv bootcmd 'fatload mmc 1:1 $loadaddr $bootfile; fatload mmc 1:1 $fdt_addr $fdt_file; booti $loadaddr - $fdt_addr';
 u-boot=>run bootcmd
+
+8. USB OTG
+==========
+
+This section only describs how to verify usb otg feature on MCIMX8QM-MEK board.
+
+8.1 Host Mode
+-------------
+
+Connect usb disk with usb typec port(J17) on MCIMX8QM-MEK board.
+Usb disk is detected, and then confirm the speed with command as below:
+
+	# lsusb -t
+	/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=/1p, 5000M
+	    |__ Port 1: Dev 2, If 0, Class=Mass Storage, Driver=usb-storage, 5000M
+	/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=/1p, 480M
+
+8.2 Device Mode
+---------------
+
+Connect the usb typec port(J17) to PC host, and then run below commands:
+
+	# modprobe libcomposite
+
+	# mkdir /sys/kernel/config/usb_gadget/g1
+	# cd /sys/kernel/config/usb_gadget/g1
+
+	# echo 0x1fc9 > idVendor
+	# echo 0x12cf > idProduct
+
+	# mkdir strings/0x409
+	# echo 123456ABCDEF > strings/0x409/serialnumber
+	# echo NXP > strings/0x409/manufacturer
+	# echo "NXP iMX USB Composite Gadget" > strings/0x409/product
+
+	# mkdir configs/c.1
+	# mkdir configs/c.1/strings/0x409
+
+	# echo 5 > configs/c.1/MaxPower
+	# echo 0xc0 > configs/c.1/bmAttributes
+
+	# mkdir functions/mass_storage.1
+	# echo /dev/mmcblk1p1 > functions/mass_storage.1/lun.0/file
+	# ln -s functions/mass_storage.1 configs/c.1/
+
+	# mkdir functions/acm.1
+	# ln -s functions/acm.1 configs/c.1
+
+	# mkdir functions/ncm.1
+	# echo 20 > functions/ncm.1/qmult
+	# ln -s functions/ncm.1 configs/c.1
+
+	# echo 5b110000.usb3 > UDC
+
+After running above commands, MCIMX8QM-MEK board works as a usb mass storage device.
