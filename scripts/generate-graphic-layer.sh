@@ -27,17 +27,19 @@ echo
 usage()
 {
     echo "\n Usage: source generate-graphic-layer.sh
-    Optional parameters: [-s source-dir] [-d destination-dir] [-h]"
+    Optional parameters: [-s source-dir] [-d destination-dir] [-p platform-type] [-h]"
     echo "
     * [-s source-dir]: Source directory where the graphic layer come from
     * [-d destination-dir]: Destination directory where the graphic will be merged into
+    * [-p platform-type]: Indicate the platform where the graphic will be used
+			  Value: imx8mq imx8qm
     * [-h]: help
     "
 }
 
 clean_up()
 {
-    unset CWD GRAPHIC_SRC GRAPHIC_DTS
+    unset CWD GRAPHIC_SRC GRAPHIC_DTS PLATFORM_TYPE
     unset usage clean_up
 }
 
@@ -74,7 +76,7 @@ done
 
 # get command line options
 OLD_OPTIND=$OPTIND
-while getopts "s:d:h" fsl_setup_flag
+while getopts "s:d:p:h" fsl_setup_flag
 do
     case $fsl_setup_flag in
         s) GRAPHIC_SRC="$OPTARG";
@@ -82,6 +84,9 @@ do
            ;;
         d) GRAPHIC_DTS="$OPTARG";
            echo "Graphic destination directory is " $GRAPHIC_DTS
+           ;;
+        p) PLATFORM_TYPE="$OPTARG";
+           echo "Graphic destination directory is " $PLATFORM_TYPE
            ;;
         h) fsl_setup_help='true';
            ;;
@@ -100,6 +105,8 @@ if test $fsl_setup_help; then
 elif test -z "$GRAPHIC_SRC"; then
     usage && clean_up && exit 1
 elif test -z "$GRAPHIC_DTS"; then
+    usage && clean_up && exit 1
+elif test -z "$PLATFORM_TYPE"; then
     usage && clean_up && exit 1
 elif test $fsl_setup_error; then
     clean_up && exit 1
@@ -127,11 +134,9 @@ BBFILE_PATTERN_imx8-graphic-layer := "^${LAYERDIR}/"
 BBFILE_PRIORITY_imx8-graphic-layer = "7"
 
 INHERIT += "machine-overrides-extender"
-MACHINEOVERRIDES_EXTENDER_nxp-imx8   = "imx:mx8:mx8m:mx8mq:imxdrm:imxdcss:imxvpu:imxvpuhantro:imxgpu:imxgpu3d"
 MACHINE_SOCARCH = "nxp_imx8"
 MACHINE_HAS_VIVANTE_KERNEL_DRIVER_SUPPORT = "1"
 
-IMAGE_INSTALL_append += "assimp devil imx-vpu-hantro imx-gpu-viv imx-gpu-sdk imx-gpu-viv-demos"
 BANNER[nxp-imx8_default] = "The nxp-imx8 layer includes third party components, where additional third party licenses may apply."
 
 IMX_MIRROR ?= "https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/"
@@ -143,13 +148,35 @@ DISTRO_FEATURES_append = " imx8-graphic"
 EOF
 fi
 
+file_modify()
+{
+	file_name=$1
+	shift
+
+	while test -n "$1"; do
+		sed -i "$1" $file_name
+		shift
+	done
+}
+
+if [ $PLATFORM_TYPE = "imx8mq" ]; then
+file_modify $GRAPHIC_DTS/imx8-graphic/conf/layer.conf \
+			"20iMACHINEOVERRIDES_EXTENDER_nxp-imx8   = \"imx:mx8:mx8m:mx8mq:imxdrm:imxdcss:imxvpu:imxvpuhantro:imxgpu:imxgpu3d\"" \
+			"24iIMAGE_INSTALL_append += \"assimp devil imx-vpu-hantro imx-gpu-viv imx-gpu-sdk imx-gpu-viv-demos\""
+elif [ $PLATFORM_TYPE = "imx8qm" ]; then
+file_modify $GRAPHIC_DTS/imx8-graphic/conf/layer.conf \
+			"20iMACHINEOVERRIDES_EXTENDER_nxp-imx8   = \"imx:mx8:mx8qm:imxdrm:imxdpu:imxgpu:imxgpu2d:imxgpu3d\"" \
+			"24iIMAGE_INSTALL_append += \"assimp devil imx-gpu-viv imx-gpu-sdk imx-gpu-viv-demos\""
+fi
 
 if [ ! -f $GRAPHIC_DTS/imx8-graphic/conf/imx8-graphic.inc ]; then
 cat > $GRAPHIC_DTS/imx8-graphic/conf/imx8-graphic.inc << EOF
-PREFERRED_PROVIDER_virtual/egl_nxp-imx8 = "imx-gpu-viv"
-PREFERRED_PROVIDER_virtual/libgles1_nxp-imx8 = "imx-gpu-viv"
-PREFERRED_PROVIDER_virtual/libgles2_nxp-imx8 = "imx-gpu-viv"
-PREFERRED_PROVIDER_virtual/libgl_nxp-imx8 = "imx-gpu-viv"
+PREFERRED_PROVIDER_virtual/egl_imxgpu        ?= "imx-gpu-viv"
+PREFERRED_PROVIDER_virtual/libgl_imxgpu3d    ?= "imx-gpu-viv"
+PREFERRED_PROVIDER_virtual/libgles1_imxgpu3d ?= "imx-gpu-viv"
+PREFERRED_PROVIDER_virtual/libgles2_imxgpu3d ?= "imx-gpu-viv"
+PREFERRED_PROVIDER_virtual/libg2d            ?= "imx-gpu-g2d"
+PREFERRED_PROVIDER_virtual/libg2d_imxdpu     ?= "imx-dpu-g2d"
 PREFERRED_VERSION_imx-vpu = "5.4.39.1"
 PREFERRED_VERSION_wayland-protocols = "1.18.imx"
 PREFERRED_VERSION_libdrm = "2.4.99.imx"
@@ -164,7 +191,6 @@ PNWHITELIST_openembedded-layer += 'freeglut'
 PNWHITELIST_imx8-graphic-layer += 'imx-gpu-viv'
 PNWHITELIST_imx8-graphic-layer += 'imx-gpu-viv-demos'
 PNWHITELIST_imx8-graphic-layer += 'imx-gpu-sdk'
-PNWHITELIST_imx8-graphic-layer += 'imx-vpu-hantro'
 PNWHITELIST_imx8-graphic-layer += 'assimp'
 PNWHITELIST_imx8-graphic-layer += 'devil'
 PNWHITELIST_imx8-graphic-layer += 'weston'
@@ -213,6 +239,17 @@ ERROR_QA_append = " \${WARN_TO_ERROR_QA}"
 EOF
 fi
 
+if [ $PLATFORM_TYPE = "imx8mq" ]; then
+file_modify $GRAPHIC_DTS/imx8-graphic/conf/imx8-graphic.inc \
+			"21iPNWHITELIST_imx8-graphic-layer += 'imx-vpu-hantro'"
+
+
+elif [ $PLATFORM_TYPE = "imx8qm" ]; then
+file_modify $GRAPHIC_DTS/imx8-graphic/conf/imx8-graphic.inc \
+			"21iPNWHITELIST_imx8-graphic-layer += 'imx-gpu-g2d'" \
+			"22iPNWHITELIST_imx8-graphic-layer += 'imx-dpu-g2d'"
+fi
+
 file_copy()
 {
 	src_file=$SOURCE_DIR/$1
@@ -237,7 +274,6 @@ file_copy()
 		shift
 	done
 }
-
 
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
@@ -297,6 +333,18 @@ file_copy recipes-graphics/drm/libdrm_2.4.99.imx.bb
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-sdk/
 file_copy recipes-graphics/gli/gli_0.8.2.0.bb
 file_copy recipes-graphics/gli/gli/0001-Set-C-standard-through-CMake-standard-options.patch
+
+if [ $PLATFORM_TYPE = "imx8qm" ]; then
+SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
+file_copy recipes-graphics/imx-dpu-g2d/imx-dpu-g2d_1.8.3.bb
+SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
+file_copy recipes-graphics/imx-dpu-g2d/imx-dpu-g2d_1.7.0.bb
+
+SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
+file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.4.0.p2.0.bb
+SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
+file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.2.4.p4.0.bb
+fi
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 file_copy recipes-graphics/imx-gpu-apitrace/imx-gpu-apitrace_8.0.0.bb
@@ -445,7 +493,12 @@ file_copy recipes-graphics/xorg-xserver/xserver-xf86-config/imx/xorg.conf
 file_copy recipes-graphics/xorg-xserver/xserver-xf86-config/imxdrm/xorg.conf
 
 file_copy recipes-kernel/linux/linux-imx-headers_5.4.bb \
-			"9iDEPENDS += \"rsync-native\""
+			"9iDEPENDS += \"rsync-native\"" \
+			"15,17d" \
+			"15iSRCBRANCH = \"v5.2/standard/nxp-imx/sdk-4.19.35/nxp-imx8\"" \
+			"16iKERNEL_SRC ?= \"git://\${LAYER_PATH_wrlinux}/git/linux-yocto.git;protocol=file\"" \
+			"17iSRC_URI = \"\${KERNEL_SRC};branch=\${SRCBRANCH}\"" \
+			"18iSRCREV = \"\${AUTOREV}\""
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/
 file_copy EULA.txt
