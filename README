@@ -309,13 +309,15 @@ Detail steps as below:
 <2> Run script scripts/generate-graphic-layer.sh and input correct parameter:
 	# ./scripts/generate-graphic-layer.sh -h
 	 Usage: source generate-graphic-layer.sh
-	    Optional parameters: [-s source-dir] [-d destination-dir] [-h]
+	    Optional parameters: [-s source-dir] [-d destination-dir] [-p platform-type] [-h]
 
 	    * [-s source-dir]: Source directory where the graphic layer come from
 	    * [-d destination-dir]: Destination directory where the graphic will be merged into
+	    * [-p platform-type]: Indicate the platform where the graphic will be used
+				  Value: imx8mq imx8qm
 	    * [-h]: help
 
-	# ./scripts/generate-graphic-layer.sh -s <nxp-sdk download directory>/imx-yocto-bsp/sources -d <wrlinux project directory>/layer/nxp-imx8/
+	# ./scripts/generate-graphic-layer.sh -s <nxp-sdk download directory>/imx-yocto-bsp/sources -d <wrlinux project directory>/layer/nxp-imx8/ -p <platform type>
 
 <3> Read WARNING information carefully, and then input 'y' if you want to generate imx8-graphic layer
 
