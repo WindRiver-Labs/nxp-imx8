@@ -145,7 +145,7 @@ For MCIMX8QM-MEK board:
 
 Note: For MCIMX8M-EVK board, $kernel_addr="0x40480000", $fdt_addr="0x44000000"
 	$console_port = "ttymxc0,115200"
-      for MCIMX8QM-MEK board, $kernel_addr="0x80280000", $fdt_addr="0x83000000"
+      for MCIMX8QM-MEK board, $kernel_addr="0x80280000", $fdt_addr="0x83500000"
 	$console_port = "ttyLP0,115200"
       The kernel image will become larger if more kernel code is compiled into kernel image.
       So, please increase "fdt_addr" value by putting dtb file at higher address if you encounter with kernel booting failed.
