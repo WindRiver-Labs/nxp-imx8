@@ -1,4 +1,4 @@
-i.MX8M Board Support Package
+i.MX8M/i.MX8QM Board Support Package
 
 
 Table of Contents
@@ -37,7 +37,7 @@ The following BSP features are validated and supported.
   o Bus
 	+ I2C: On-Chip I2C controller
 	+ PCIe: On-Chip PCIe controller
-	+ SPI: Freescale QuadSPI bus controller in master mode
+	+ SPI: Freescale QuadSPI bus controller in master mode(exclude MCIMX8QM-MEK)
 	+ uSDHC: On-Chip ultra secured digital host controller
 
   o Network
@@ -55,7 +55,7 @@ The following BSP features are validated and supported.
 
   o Multimedia
 	+ SAI Audio:
-		+ WM8524 codec (MCIMX8M-EVK)
+		+ WM8524 codec (MCIMX8M-EVK MCIMX8QM-MEK)
 		+ WM8960 codec (MCIMX8QXP-MEK)
 	+ HDMI: On-Chip HDMI controller
 	+ DCSS: Display controller subsystem
@@ -113,9 +113,9 @@ MCIMX8M-EVK:
 MCIMX8QM-MEK:
 	Processor:             IMX8QM-MEK
 	CPU Revision:          NXP i.MX8QM RevB A53 at 1200 MHz at 27C
-	Board Revision:        MCIMX8MMINI-EVK SCH-29420 REV C2, 700-29420 REV C2
+	Board Revision:        MCIMX8QM-MEK SCH-29420 REV C2, 700-29420 REV C2
 	BootLoader:            U-Boot
-	BootLoader Version:    U-Boot SPL 2019.04-4.19.35-1.1.0+g4d377539a1 (Jun 01 2020 - 02:15:48 +0000)
+	BootLoader Version:    U-Boot SPL 2019.04-4.19.35-1.1.0+g4d377539a1
 
 4.2 Specify boot medium
 -----------------------
