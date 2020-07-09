@@ -1,4 +1,4 @@
-        MCIMX8M-EVK Board Support Package
+        MCIMX8M-EVK/MCIMX8QM-MEK Board Support Package
 
 1. About this document
 ======================
@@ -197,7 +197,7 @@ The debug UART can be set as a wakeup source with:
 
 For MCIMX8M-EVK board:
 	# echo enabled > /sys/class/tty/ttymxc0/power/wakeup
-For MCIMX8QXP-MEK board:
+For MCIMX8QM-MEK board:
 	# echo enabled > /sys/class/tty/ttyLP0/power/wakeup
 
 	# echo mem > /sys/power/state
@@ -364,8 +364,8 @@ ACCEPT_FSL_EULA = "1" to your local.conf file to continue the building.
 5.8 PCIe
 --------
 
-The MCIMX8QXP-MEK has only one PCIe interface. It is connected to the M.2
-connecter with E-Key on the MEK Board.
+All the imx8 platforms support PCIe feature.
+The PCIe bus is provided through the M.2 connector.
 
 Can choose the below PCIe peripheral to validate:
 
