@@ -422,7 +422,7 @@ For MCIMX8M-EVK board:
 	crashkernel=512M@3000M
 
 For MCIMX8QM-MEK board:
-	crashkernel=256M
+	crashkernel=512M
 
 For the dump-capture kernel:
 Before booting the dump-capture kernel, add "maxcpus=1 cma=128M" to the boot parameter.
