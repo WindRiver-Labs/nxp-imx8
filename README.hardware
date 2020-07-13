@@ -1,4 +1,4 @@
-i.MX8M/i.MX8QM Board Support Package
+i.MX8M/i.MX8QM/i.MX8MMINI Board Support Package
 
 
 Table of Contents
@@ -18,12 +18,15 @@ This BSP supports the following boards:
 			 CPU: Freescale i.MX8MQ rev2.0 1500 MHz
    + MCIMX8QM-MEK : Board: MCIMX8QM-MEK SCH-29420 REV C2, 700-29420 REV C2.
 			 CPU: NXP i.MX8QM RevB A53 at 1200 MHz at 27C
+   + MCIMX8MMINI-EVK : Board: MCIMX8MMINI-EVK SCH-31407 REV C3, 700-31407 REV A2.
+                         CPU: Freescale i.MX8MMQ rev1.0 1800 MHz
 
 2. Change History
 =================
 
   - 2020/05 (LINUXPG-99): WRL-10.19.45.8, support MCIMX8M-EVK board based on NXP IMX SDK v4.19.35
   - 2020/05 (LINUXPG-463): WRL-10.19.45.10, support MCIMX8QM-MEK board based on NXP IMX SDK v4.19.35
+  - 2020/07 (LINUXPG-464): WRL-10.19.45.11, support MCIMX8QM-MEK board based on NXP IMX SDK v4.19.35
 
 
 3. BSP Features
@@ -49,13 +52,14 @@ The following BSP features are validated and supported.
 	+ USB Host: xHCI compatible host controller in the chip
 
   o Storage
-	+ eMMC: On-chip 16GB  MTFC16GAKAECN-2M (MCIMX8M-EVK)
+	+ eMMC: On-chip 16GB  MTFC16GAKAECN-2M (MCIMX8M-EVK MCIMX8MMINI-EVK)
 		On-chip 32GB  MTFC32GAKAEEF-AIT (MCIMX8QM-MEK)
 	+ NOR Flash: 32MB MT25QL256ABA1EW9 SPI NOR Flash (MCIMX8M-EVK)
+		     32MB MT25QU256ABA1EW7 SPI NOR Flash (MCIMX8MMINI-EVK)
 
   o Multimedia
 	+ SAI Audio:
-		+ WM8524 codec (MCIMX8M-EVK MCIMX8QM-MEK)
+		+ WM8524 codec (MCIMX8M-EVK MCIMX8QM-MEK MCIMX8MMINI-EVK)
 		+ WM8960 codec (MCIMX8QXP-MEK)
 	+ HDMI: On-Chip HDMI controller
 	+ DCSS: Display controller subsystem
@@ -117,6 +121,13 @@ MCIMX8QM-MEK:
 	BootLoader:            U-Boot
 	BootLoader Version:    U-Boot SPL 2019.04-4.19.35-1.1.0+g4d377539a1
 
+MCIMX8MMINI-EVK:
+        Processor:             IMX8MMINI-EVK
+        CPU Revision:          rev1.0
+        Board Revision:        MCIMX8MMINI-EVK SCH-31407 REV C3, 700-31407 REV A2
+        BootLoader:            U-Boot
+        BootLoader Version:    U-Boot SPL 2019.04-lf-5.4.y_v2019.04+g228843cdf5
+
 4.2 Specify boot medium
 -----------------------
 
@@ -153,3 +164,22 @@ The following table shows the boot switch settings to boot from eMMC MTFC16GAKAE
 
 Switch  D1      D2      D3      D4      D5      D6
 SW2     OFF     OFF     OFF     ON      OFF     OFF
+
+4.2.3 MCIMX8MMINI-EVK (SCH-31407 REV C3, 700-31407 REV A2)
+--------------------------------------------------------
+
+1. Booting from SD card
+
+The following table shows the boot switch setup for SD1 boot
+
+Switch  D1      D2      D3      D4      D5      D6      D7      D8      D9      D10
+SW1     OFF     ON      ON      OFF     ON      ON      OFF     OFF     ON      OFF
+SW2     OFF     OFF     OFF     ON      ON      OFF     ON      OFF     OFF     OFF
+
+2. Booting from eMMC
+
+The following table shows the boot switch settings to boot from eMMC MTFC16GAKAECN-2M.
+
+Switch  D1      D2      D3      D4      D5      D6      D7      D8      D9      D10
+SW1     OFF     ON      ON      OFF     ON      ON      OFF     OFF     OFF     ON
+SW2     OFF     OFF     OFF     ON      OFF     ON      OFF     ON      OFF     OFF
