@@ -1,4 +1,4 @@
-        MCIMX8M-EVK/MCIMX8QM-MEK Board Support Package
+        MCIMX8M-EVK/MCIMX8QM-MEK/MCIMX8MMINI-EVK Board Support Package
 
 1. About this document
 ======================
@@ -121,6 +121,10 @@ For MCIMX8QM-MEK board:
 	If you want to connect OV5640 MIPI camera to MIPI CSI1(J5) or CSI0(J10):
 	# tftp $fdt_addr fsl-imx8qm-mek-ov5640.dtb
 
++For MCIMX8MMINI-EVK board:
+	If you want to use MX8-DSI-OLED1 on J801 as output:
+	# tftp $fdt_addr fsl-imx8mm-evk-rm67191.dtb
+
 4.1.4 Download and load firmware
 --------------------------------
 For MCIMX8QM-MEK board:
@@ -147,6 +151,8 @@ Note: For MCIMX8M-EVK board, $kernel_addr="0x40480000", $fdt_addr="0x44000000"
 	$console_port = "ttymxc0,115200"
       for MCIMX8QM-MEK board, $kernel_addr="0x80280000", $fdt_addr="0x83500000"
 	$console_port = "ttyLP0,115200"
+      for MCIMX8MMINI-EVK board, $kernel_addr="0x40480000", $fdt_addr="0x43000000"
+	$console_port = "ttymxc1,115200"
       The kernel image will become larger if more kernel code is compiled into kernel image.
       So, please increase "fdt_addr" value by putting dtb file at higher address if you encounter with kernel booting failed.
 
@@ -199,6 +205,8 @@ For MCIMX8M-EVK board:
 	# echo enabled > /sys/class/tty/ttymxc0/power/wakeup
 For MCIMX8QM-MEK board:
 	# echo enabled > /sys/class/tty/ttyLP0/power/wakeup
+For MCIMX8MMINI-EVK board:
+	#  echo enabled > /sys/class/tty/ttymxc1/power/wakeup
 
 	# echo mem > /sys/power/state
 
@@ -423,6 +431,9 @@ For MCIMX8M-EVK board:
 
 For MCIMX8QM-MEK board:
 	crashkernel=512M
+
+For MCIMX8MMINI-EVK board:
+	crashkernel=256M
 
 For the dump-capture kernel:
 Before booting the dump-capture kernel, add "maxcpus=1 cma=128M" to the boot parameter.
