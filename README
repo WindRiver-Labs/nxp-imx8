@@ -1,4 +1,4 @@
-        MCIMX8M-EVK/MCIMX8QM-MEK/MCIMX8MMINI-EVK Board Support Package
+        MCIMX8M-EVK/MCIMX8QM-MEK/MCIMX8MMINI-EVK/MCIMX8QXP-MEK Board Support Package
 
 1. About this document
 ======================
@@ -125,6 +125,16 @@ For MCIMX8QM-MEK board:
 	If you want to use MX8-DSI-OLED1 on J801 as output:
 	# tftp $fdt_addr fsl-imx8mm-evk-rm67191.dtb
 
+For MCIMX8QXP-MEK board:
+        If you want to use HDMI connector J3 as output:
+        # tftp $fdt_addr fsl-imx8qxp-mek.dtb
+
+        If you want to use OV5640 MIPI camera on J2:
+        # tftp $fdt_addr fsl-imx8qxp-mek-mipi-ov5640.dtb
+
+        If you want to use MX8-DSI-OLED1 on J1 as output:
+        # tftp $fdt_addr fsl-imx8qxp-mek-dsi-rm67191.dtb
+
 4.1.4 Download and load firmware
 --------------------------------
 For MCIMX8QM-MEK board:
@@ -153,6 +163,8 @@ Note: For MCIMX8M-EVK board, $kernel_addr="0x40480000", $fdt_addr="0x44000000"
 	$console_port = "ttyLP0,115200"
       for MCIMX8MMINI-EVK board, $kernel_addr="0x40480000", $fdt_addr="0x43500000"
 	$console_port = "ttymxc1,115200"
+      for MCIMX8QXP-MEK board, $kernel_addr="0x80280000", $fdt_addr="0x83500000"
+	$console_port = "ttyLP0,115200"
       The kernel image will become larger if more kernel code is compiled into kernel image.
       So, please increase "fdt_addr" value by putting dtb file at higher address if you encounter with kernel booting failed.
 
@@ -207,6 +219,8 @@ For MCIMX8QM-MEK board:
 	# echo enabled > /sys/class/tty/ttyLP0/power/wakeup
 For MCIMX8MMINI-EVK board:
 	#  echo enabled > /sys/class/tty/ttymxc1/power/wakeup
+For MCIMX8QXP-MEK board:
+        # echo enabled > /sys/class/tty/ttyLP0/power/wakeup
 
 	# echo mem > /sys/power/state
 
@@ -405,6 +419,52 @@ Execute the following commands to validate the WiFi cards:
 
 NOTE: the PCIe driver does not support hotplug and suspend/resume.
 
+5.9 FLEXCAN (MCIMX8QXP-MEK)
+---------------------------
+
+Detail verification commands as below:
+
+        # ip link set can0 up type can bitrate 125000 dbitrate 8000000 fd on
+        # ip link set can1 up type can bitrate 125000 dbitrate 8000000 fd on
+        # candump can0 &
+        # cansend can1 5A1#11.22.33.44.55.66.77.88
+        # ip -d -s link show can0
+        # ip -d -s link show can1
+
+If can0 dumps data from can1, FLEXCAN feature works fine.
+
+5.10 CortexM4 (MCIMX8QXP-MEK)
+-----------------------------
+
+The MCIMX8QXP has CortexM4 integrated to SOC, below is how to validate the CortexM4.
+
+1. First need to make a bootable SD card together with U-BOOT to boot CortexA35 &
+CortexM4. About how to make this SD card, please refer to the document
+"Getting Started with MCUXpresso SDK for i.MX 8QuadXPlus", we used demo
+"imx8qx_m4_TCM_rpmsg_lite_str_echo_rtos.bin" as M4 image.
+
+2. Second determine COM ports, connect J11 of MCIMX8QXP-MEK board to your host machine,
+run command like:
+        # dmesg | grep ttyUSB
+        usb 2-2.1: FTDI USB Serial Device converter now attached to ttyUSB0
+        usb 2-2.1: FTDI USB Serial Device converter now attached to ttyUSB1
+
+One will be for CortexA35 UART, another for CortexM4 UART.
+
+3. Run RPMsg from WRLinux on Cortex A35 side:
+        # modprobe imx_rpmsg_tty.ko
+        imx_rpmsg_tty virtio1.rpmsg-openamp-demo-channel.-1.30: new channel: 0x400 -> 0x1e!
+        Install rpmsg tty driver!
+        rpmsg_tty_cb68 65 6c 6c 6f 20 77 6f 72 6c 64 21              hello world!
+        # echo deadbeaf > /dev/ttyRPMSG30
+
+4. There will be output on Cortex M4 side:
+        #Get Message From Master Side : "hello world!" [len : 12]
+        #Get Message From Master Side : "deadbeaf" [len : 8]
+
+5. If you want to use M4 to play music, you can use fsl-imx8qxp-mek-rpmsg.dtb, but it needs to
+be on a specific QXP board, such as SPF-29683-D5, and the audio device is connected to the M4 core.
+we used demo "imx8qx_m4_TCM_srtm_demo.bin" as M4 image.
 
 6. kexec/kdump
 ==============
@@ -434,6 +494,9 @@ For MCIMX8QM-MEK board:
 
 For MCIMX8MMINI-EVK board:
 	crashkernel=256M
+
+For MCIMX8QXP-MEK board:
+        crashkernel=512M@0
 
 For the dump-capture kernel:
 Before booting the dump-capture kernel, add "maxcpus=1 cma=128M" to the boot parameter.
@@ -493,6 +556,12 @@ For MCIMX8QM-MEK board:
 	# dd if=imx-boot-<$machine>-sd.bin-flash_linux_m4 of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
 
 Note: $machine = "imx8qmmek", seek = "32"
+
+For MCIMX8QM-MEK board:
+
+        # dd if=imx-boot-<$machine>-sd.bin-flash_linux_m4 of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
+
+Note: $machine = "imx8qxp", seek = "32"
 
 4) Set environment variable for booting system
 
