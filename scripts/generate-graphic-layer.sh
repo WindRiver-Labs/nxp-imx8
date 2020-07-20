@@ -280,6 +280,7 @@ SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 DESTINATION_DIR=$GRAPHIC_DTS/imx8-graphic/
 
 file_copy classes/fsl-eula-unpack.bbclass
+mv $GRAPHIC_DTS/imx8-graphic/classes/fsl-eula-unpack.bbclass $GRAPHIC_DTS/imx8-graphic/classes/fsl-eula-unpack-graphic.bbclass
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 
@@ -289,7 +290,8 @@ file_copy classes/use-imx-headers.bbclass
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 
 file_copy recipes-bsp/imx-vpu-hantro/imx-vpu-hantro_1.16.0.bb
-file_copy recipes-bsp/imx-vpu-hantro/imx-vpu-hantro.inc
+file_copy recipes-bsp/imx-vpu-hantro/imx-vpu-hantro.inc \
+			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
 
 file_copy recipes-core/systemd/systemd/0001-systemd-udevd.service.in-Set-PrivateMounts-to-no-to-.patch
 file_copy recipes-core/systemd/systemd/0020-logind.conf-Set-HandlePowerKey-to-ignore.patch
@@ -338,12 +340,14 @@ if [ $PLATFORM_TYPE = "imx8qm" ]; then
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 file_copy recipes-graphics/imx-dpu-g2d/imx-dpu-g2d_1.8.3.bb
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
-file_copy recipes-graphics/imx-dpu-g2d/imx-dpu-g2d_1.7.0.bb
+file_copy recipes-graphics/imx-dpu-g2d/imx-dpu-g2d_1.7.0.bb \
+			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.4.0.p2.0.bb
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
-file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.2.4.p4.0.bb
+file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.2.4.p4.0.bb \
+			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
 fi
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
@@ -403,7 +407,8 @@ file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv-6.inc \
 			"311iFILES_libvulkan-imx = \"\${libdir}/vulkan/libvulkan_VSI\${SOLIBS}\"" \
 			"312iFILES_libvulkan-imx-dev = \"\${includedir}/vulkan \${libdir}/vulkan/libvulkan_VSI\${SOLIBSDEV}\"" \
 			"313iINSANE_SKIP_libvulkan-imx += \"dev-deps dev-so\"" \
-			"344d"
+			"344d" \
+			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
 
 
 file_copy recipes-graphics/mesa/mesa_%.bbappend \
