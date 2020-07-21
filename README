@@ -493,7 +493,7 @@ For MCIMX8QM-MEK board:
 	crashkernel=512M
 
 For MCIMX8MMINI-EVK board:
-	crashkernel=256M
+	crashkernel=512M
 
 For MCIMX8QXP-MEK board:
         crashkernel=512M@0
