@@ -141,7 +141,7 @@ BANNER[nxp-imx8_default] = "The nxp-imx8 layer includes third party components, 
 
 IMX_MIRROR ?= "https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/"
 FSL_MIRROR ?= "${IMX_MIRROR}"
-FSL_EULA_FILE = "${LAYERDIR}/EULA"
+FSL_EULA_FILE_GRAPHIC = "${LAYERDIR}/EULA"
 
 LAYERSERIES_COMPAT_imx8-graphic-layer = "wrl warrior zeus"
 DISTRO_FEATURES_append = " imx8-graphic"
@@ -279,7 +279,8 @@ file_copy()
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 DESTINATION_DIR=$GRAPHIC_DTS/imx8-graphic/
 
-file_copy classes/fsl-eula-unpack.bbclass
+file_copy classes/fsl-eula-unpack.bbclass \
+			"s/FSL_EULA_FILE/FSL_EULA_FILE_GRAPHIC/g"
 mv $GRAPHIC_DTS/imx8-graphic/classes/fsl-eula-unpack.bbclass $GRAPHIC_DTS/imx8-graphic/classes/fsl-eula-unpack-graphic.bbclass
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
