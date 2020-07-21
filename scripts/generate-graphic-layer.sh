@@ -374,6 +374,7 @@ file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv_6.4.0.p2.0-aarch64.bb \
 mv $GRAPHIC_DTS/imx8-graphic/recipes-graphics/imx-gpu-viv/imx-gpu-viv_6.4.0.p2.0-aarch64.bb \
 	 $GRAPHIC_DTS/imx8-graphic/recipes-graphics/imx-gpu-viv/imx-gpu-viv_6.4.0.p1.0-aarch64.bb
 file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv-v6.inc \
+			"s/recipes-graphics\/imx-gpu-viv\/imx-gpu-viv-6.inc/imx-gpu-viv-6.inc/g" \
 			"s/libnn-imx libnn-imx-dev/libnn-imx/g" \
 			"12iGLES3_HEADER_REMOVALS_mx8qxp_remove = \"gl32.h\"" \
 			"16iFILES_libvulkan-imx = \"\${libdir}/vulkan/libvulkan_VSI\${SOLIBS} \${libdir}/libSPIRV_viv\${SOLIBS}\"" \
