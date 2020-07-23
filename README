@@ -121,9 +121,15 @@ For MCIMX8QM-MEK board:
 	If you want to connect OV5640 MIPI camera to MIPI CSI1(J5) or CSI0(J10):
 	# tftp $fdt_addr fsl-imx8qm-mek-ov5640.dtb
 
-+For MCIMX8MMINI-EVK board:
+For MCIMX8MMINI-EVK board:
 	If you want to use MX8-DSI-OLED1 on J801 as output:
 	# tftp $fdt_addr fsl-imx8mm-evk-rm67191.dtb
+
+	If you want to use OV5640 MIPI camera on J802 as output:
+	# tftp $fdt_addr fsl-imx8mm.dtb
+
+	If you want to use HDMI connector on J801 as output:
+	# tftp $fdt_addr fsl-imx8mm.dtb
 
 For MCIMX8QXP-MEK board:
         If you want to use HDMI connector J3 as output:
