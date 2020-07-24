@@ -32,7 +32,7 @@ usage()
     * [-s source-dir]: Source directory where the graphic layer come from
     * [-d destination-dir]: Destination directory where the graphic will be merged into
     * [-p platform-type]: Indicate the platform where the graphic will be used
-			  Value: imx8mq imx8qm
+			  Value: imx8mq imx8qm imx8mm
     * [-h]: help
     "
 }
@@ -163,6 +163,10 @@ if [ $PLATFORM_TYPE = "imx8mq" ]; then
 file_modify $GRAPHIC_DTS/imx8-graphic/conf/layer.conf \
 			"20iMACHINEOVERRIDES_EXTENDER_nxp-imx8   = \"imx:mx8:mx8m:mx8mq:imxdrm:imxdcss:imxvpu:imxvpuhantro:imxgpu:imxgpu3d\"" \
 			"24iIMAGE_INSTALL_append += \"assimp devil imx-vpu-hantro imx-gpu-viv imx-gpu-sdk imx-gpu-viv-demos\""
+elif [ $PLATFORM_TYPE = "imx8mm" ]; then
+file_modify $GRAPHIC_DTS/imx8-graphic/conf/layer.conf \
+			"20iMACHINEOVERRIDES_EXTENDER_nxp-imx8   = \"imx:mx8:mx8m:mx8mm:imxdrm:imxvpu:imxvpuhantro:imxgpu:imxgpu2d:imxgpu3d\"" \
+			"24iIMAGE_INSTALL_append += \"assimp devil imx-vpu-hantro imx-gpu-viv imx-gpu-sdk imx-gpu-viv-demos\""
 elif [ $PLATFORM_TYPE = "imx8qm" ]; then
 file_modify $GRAPHIC_DTS/imx8-graphic/conf/layer.conf \
 			"20iMACHINEOVERRIDES_EXTENDER_nxp-imx8   = \"imx:mx8:mx8qm:imxdrm:imxdpu:imxgpu:imxgpu2d:imxgpu3d\"" \
@@ -243,6 +247,10 @@ if [ $PLATFORM_TYPE = "imx8mq" ]; then
 file_modify $GRAPHIC_DTS/imx8-graphic/conf/imx8-graphic.inc \
 			"21iPNWHITELIST_imx8-graphic-layer += 'imx-vpu-hantro'"
 
+elif [ $PLATFORM_TYPE = "imx8mm" ]; then
+file_modify $GRAPHIC_DTS/imx8-graphic/conf/imx8-graphic.inc \
+                        "21iPNWHITELIST_imx8-graphic-layer += 'imx-vpu-hantro'" \
+			"22iPNWHITELIST_imx8-graphic-layer += 'imx-gpu-g2d'"
 
 elif [ $PLATFORM_TYPE = "imx8qm" ]; then
 file_modify $GRAPHIC_DTS/imx8-graphic/conf/imx8-graphic.inc \
@@ -349,6 +357,13 @@ file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.4.0.p2.0.bb
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.2.4.p4.0.bb \
 			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
+
+elif [ $PLATFORM_TYPE = "imx8mm" ]; then
+SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
+file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.4.0.p2.0.bb
+SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
+file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.2.4.p4.0.bb \
+                        "s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
 fi
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
