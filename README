@@ -447,7 +447,14 @@ The MCIMX8QXP has CortexM4 integrated to SOC, below is how to validate the Corte
 1. First need to make a bootable SD card together with U-BOOT to boot CortexA35 &
 CortexM4. About how to make this SD card, please refer to the document
 "Getting Started with MCUXpresso SDK for i.MX 8QuadXPlus", we used demo
-"imx8qx_m4_TCM_rpmsg_lite_str_echo_rtos.bin" as M4 image.
+"imx8qx_m4_TCM_srtm_demo.bin" as M4 image. You can use the following command to load 
+the firmware.
+
+	fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} imx8qx_m4_TCM_srtm_demo.bin dcache flush bootaux ${loadaddr} 0
+
+Or use imx-boot-<$machine>-sd.bin-flash_linux_m4 as uboot
+
+	# dd if=imx-boot-<$machine>-sd.bin-flash_linux_m4 of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
 
 2. Second determine COM ports, connect J11 of MCIMX8QXP-MEK board to your host machine,
 run command like:
@@ -457,20 +464,13 @@ run command like:
 
 One will be for CortexA35 UART, another for CortexM4 UART.
 
-3. Run RPMsg from WRLinux on Cortex A35 side:
-        # modprobe imx_rpmsg_tty.ko
-        imx_rpmsg_tty virtio1.rpmsg-openamp-demo-channel.-1.30: new channel: 0x400 -> 0x1e!
-        Install rpmsg tty driver!
-        rpmsg_tty_cb68 65 6c 6c 6f 20 77 6f 72 6c 64 21              hello world!
-        # echo deadbeaf > /dev/ttyRPMSG30
+3. Use fsl-imx8qxp-mek-rpmsg.dtb to start the system, you can see that sensors such as
+fxxos8700, fxas2100, isl29023 have successfully registered through the i2c-rpmsg channel,
+or you can also use i2ctools to test the communication process with M4 core. like this
 
-4. There will be output on Cortex M4 side:
-        #Get Message From Master Side : "hello world!" [len : 12]
-        #Get Message From Master Side : "deadbeaf" [len : 8]
+        i2cget -f -y 14 0x1e 0xd
 
-5. If you want to use M4 to play music, you can use fsl-imx8qxp-mek-rpmsg.dtb, but it needs to
-be on a specific QXP board, such as SPF-29683-D5, and the audio device is connected to the M4 core.
-we used demo "imx8qx_m4_TCM_srtm_demo.bin" as M4 image.
+If you can get 0xc7 or 0xc4, the communication is successful
 
 6. kexec/kdump
 ==============
@@ -563,9 +563,9 @@ For MCIMX8QM-MEK board:
 
 Note: $machine = "imx8qmmek", seek = "32"
 
-For MCIMX8QM-MEK board:
+For MCIMX8QXP-MEK board:
 
-        # dd if=imx-boot-<$machine>-sd.bin-flash_linux_m4 of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
+        # dd if=imx-boot-<$machine>-sd.bin-flash of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
 
 Note: $machine = "imx8qxp", seek = "32"
 
