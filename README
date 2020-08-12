@@ -342,7 +342,7 @@ Detail steps as below:
 	    * [-s source-dir]: Source directory where the graphic layer come from
 	    * [-d destination-dir]: Destination directory where the graphic will be merged into
 	    * [-p platform-type]: Indicate the platform where the graphic will be used
-				  Value: imx8mq imx8qm
+				  Value: imx8mq imx8qm imx8mm imx8qxp
 	    * [-h]: help
 
 	# ./scripts/generate-graphic-layer.sh -s <nxp-sdk download directory>/imx-yocto-bsp/sources -d <wrlinux project directory>/layer/nxp-imx8/ -p <platform type>
@@ -447,12 +447,9 @@ The MCIMX8QXP has CortexM4 integrated to SOC, below is how to validate the Corte
 1. First need to make a bootable SD card together with U-BOOT to boot CortexA35 &
 CortexM4. About how to make this SD card, please refer to the document
 "Getting Started with MCUXpresso SDK for i.MX 8QuadXPlus", we used demo
-"imx8qx_m4_TCM_srtm_demo.bin" as M4 image. You can use the following command to load 
-the firmware.
+"imx8qx_m4_TCM_srtm_demo.bin" as M4 image.
 
-	fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} imx8qx_m4_TCM_srtm_demo.bin dcache flush bootaux ${loadaddr} 0
-
-Or use imx-boot-<$machine>-sd.bin-flash_linux_m4 as uboot
+Use imx-boot-<$machine>-sd.bin-flash_linux_m4 as uboot
 
 	# dd if=imx-boot-<$machine>-sd.bin-flash_linux_m4 of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
 
@@ -563,9 +560,15 @@ For MCIMX8QM-MEK board:
 
 Note: $machine = "imx8qmmek", seek = "32"
 
+For MCIMX8MM-EVK board:
+
+	# dd if=imx-boot-<$machine>-sd.bin-flash_evk of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
+
+Note: $machine = "imx8mmevk", seek = "33"
+
 For MCIMX8QXP-MEK board:
 
-        # dd if=imx-boot-<$machine>-sd.bin-flash of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
+        # dd if=imx-boot-<$machine>-sd.bin-flash_spl of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
 
 Note: $machine = "imx8qxp", seek = "32"
 
