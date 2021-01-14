@@ -133,7 +133,7 @@ For MCIMX8QM-MEK board:
 		 video=HDMI-A-1:1920x1080-32@60
 	# booti $kernel_addr - $fdt_addr
 
-Note: for MCIMX8QM-MEK board, $kernel_addr="0x80280000", $fdt_addr="0x83500000"
+Note: for MCIMX8QM-MEK board, $kernel_addr="0x80280000", $fdt_addr="0x83800000"
 	$console_port = "ttyLP0,115200"
       The kernel image will become larger if more kernel code is compiled into kernel image.
       So, please increase "fdt_addr" value by putting dtb file at higher address if you encounter with kernel booting failed.
