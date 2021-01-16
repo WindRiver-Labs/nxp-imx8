@@ -143,7 +143,7 @@ IMX_MIRROR ?= "https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/"
 FSL_MIRROR ?= "${IMX_MIRROR}"
 FSL_EULA_FILE_GRAPHIC = "${LAYERDIR}/EULA"
 
-LAYERSERIES_COMPAT_imx8-graphic-layer = "wrl warrior zeus"
+LAYERSERIES_COMPAT_imx8-graphic-layer = "wrl dunfell gatesgarth"
 DISTRO_FEATURES_append = " imx8-graphic"
 EOF
 fi
@@ -291,13 +291,21 @@ file_copy()
 	done
 }
 
-
-SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
+SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 DESTINATION_DIR=$GRAPHIC_DTS/imx8-graphic/
 
 file_copy classes/fsl-eula-unpack.bbclass \
-			"s/FSL_EULA_FILE/FSL_EULA_FILE_GRAPHIC/g"
+			"s/FSL_EULA_FILE/FSL_EULA_FILE_GRAPHIC/g" \
+			'30i\FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V13 = \"1b4db4b25c3a1e422c0c0ed64feb65d2\"' \
+			'31i\FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V15 = \"983e4c77621568488dd902b27e0c2143\"' \
+			'53a\    ${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V13} \\' \
+			'54a\    ${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V15} \\' \
+			"60d" \
+			'60i\    "${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V15}"'
 mv $GRAPHIC_DTS/imx8-graphic/classes/fsl-eula-unpack.bbclass $GRAPHIC_DTS/imx8-graphic/classes/fsl-eula-unpack-graphic.bbclass
+
+SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-sdk/
+file_copy classes/features_check.bbclass
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 
@@ -306,13 +314,13 @@ file_copy classes/use-imx-headers.bbclass
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 
-file_copy recipes-bsp/imx-vpu-hantro/imx-vpu-hantro_1.16.0.bb
+file_copy recipes-bsp/imx-vpu-hantro/imx-vpu-hantro_1.19.0.bb
 file_copy recipes-bsp/imx-vpu-hantro/imx-vpu-hantro.inc \
 			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
 
-file_copy recipes-core/systemd/systemd/0001-systemd-udevd.service.in-Set-PrivateMounts-to-no-to-.patch
 file_copy recipes-core/systemd/systemd/0020-logind.conf-Set-HandlePowerKey-to-ignore.patch
-file_copy recipes-core/systemd/systemd_%.bbappend
+file_copy recipes-core/systemd/systemd_%.bbappend \
+			"4d"
 
 file_copy recipes-core/systemd/systemd-gpuconfig/gpuconfig
 file_copy recipes-core/systemd/systemd-gpuconfig/gpuconfig.service
@@ -320,7 +328,7 @@ file_copy recipes-core/systemd/systemd-gpuconfig_1.0.bb
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-sdk/
 
-file_copy recipes-devtools/half/half_1.12.0.bb
+file_copy recipes-devtools/half/half_2.1.0.bb
 file_copy recipes-devtools/stb/stb_git.bb
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
@@ -331,121 +339,248 @@ file_copy recipes-graphics/cairo/cairo_%.bbappend
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-sdk/
 
 file_copy recipes-graphics/devil/devil_1.8.0.bb
-file_copy recipes-graphics/devil/devil_%.bbappend \
-		"\$a\\\ndo_install_append() {" \
-		"\$a\	mv \${D}/usr/lib \${D}\${libdir}" \
-		"\$a}"
+file_copy recipes-graphics/devil/devil_%.bbappend
+file_copy recipes-graphics/devil/devil/0001-CMakeLists-Use-CMAKE_INSTALL_LIBDIR-for-install-libs.patch
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 
 file_copy recipes-graphics/drm/libdrm_%.bbappend
-file_copy recipes-graphics/drm/libdrm_2.4.91.imx.bb
+file_copy recipes-graphics/drm/libdrm_2.4.91.imx.bb \
+			"s/libpthread-stubs libpciaccess/libpthread-stubs/g" \
+			"s/libdrm-imx-2.4.91/libdrm-imx-2.4.99/g" \
+			"16,20d" \
+			'16i\	file://musl-ioctl.patch \\' \
+			'17i\	file://0001-meson-add-libdrm-vivante-to-the-meson-meta-data.patch "' \
+			"s/95645843f59495387a072d48374718f22e69d7a4/f421c9c8c4b8fe48d9e6ef43910e98569c94a4b2/g" \
+			"s/autotools/meson/g" \
+			"25,31d" \
+			'25i\PACKAGECONFIG ??= "libkms intel radeon amdgpu nouveau vmwgfx omap freedreno vc4 etnaviv install-test-programs"' \
+			'26i\PACKAGECONFIG[libkms] = "-Dlibkms=true,-Dlibkms=false"' \
+			'27i\PACKAGECONFIG[intel] = "-Dintel=true,-Dintel=false,libpciaccess"' \
+			'28i\PACKAGECONFIG[radeon] = "-Dradeon=true,-Dradeon=false"' \
+			'29i\PACKAGECONFIG[amdgpu] = "-Damdgpu=true,-Damdgpu=false"' \
+			'30i\PACKAGECONFIG[nouveau] = "-Dnouveau=true,-Dnouveau=false"' \
+			'31i\PACKAGECONFIG[vmwgfx] = "-Dvmwgfx=true,-Dvmwgfx=false"' \
+			'32i\PACKAGECONFIG[omap] = "-Domap=true,-Domap=false"' \
+			'33i\PACKAGECONFIG[exynos] = "-Dexynos=true,-Dexynos=false"' \
+			'34i\PACKAGECONFIG[freedreno] = "-Dfreedreno=true,-Dfreedreno=false"' \
+			'35i\PACKAGECONFIG[tegra] = "-Dtegra=true,-Dtegra=false"' \
+			'36i\PACKAGECONFIG[vc4] = "-Dvc4=true,-Dvc4=false"' \
+			'37i\PACKAGECONFIG[etnaviv] = "-Detnaviv=true,-Detnaviv=false"' \
+			'38i\PACKAGECONFIG[freedreno-kgsl] = "-Dfreedreno-kgsl=true,-Dfreedreno-kgsl=false"' \
+			'39i\PACKAGECONFIG[valgrind] = "-Dvalgrind=true,-Dvalgrind=false,valgrind"' \
+			'40i\PACKAGECONFIG[install-test-programs] = "-Dinstall-test-programs=true,-Dinstall-test-programs=false"' \
+			'41i\PACKAGECONFIG[cairo-tests] = "-Dcairo-tests=true,-Dcairo-tests=false"' \
+			'42i\PACKAGECONFIG[udev] = "-Dudev=true,-Dudev=false,udev"' \
+			"s/'--enable-manpages', '--disable-manpages'/'-Dman-pages=true', '-Dman-pages=false'/g" \
+			"s/EXTRA_OECONF_append_imxgpu = \" --enable-vivante-experimental-api\"/BBCLASSEXTEND = \"native nativesdk\"/g" \
+			'69a\PACKAGECONFIG_append_imxgpu = " vivante"' \
+			'70a\PACKAGECONFIG[vivante] = "-Dvivante=true,-Dvivante=false"' \
+			"s/--enable-manpages/-Dman-pages=true/g" \
+			"s/--disable-manpages/-Dman-pages=false/g"
+mv $GRAPHIC_DTS/imx8-graphic/recipes-graphics/drm/libdrm_2.4.91.imx.bb $GRAPHIC_DTS/imx8-graphic/recipes-graphics/drm/libdrm_2.4.99.imx.bb
 file_copy recipes-graphics/drm/libdrm/imxgpu2d/drm-update-arm.patch
 file_copy recipes-graphics/drm/libdrm/0001-configure.ac-Allow-explicit-enabling-of-cunit-tests.patch
 file_copy recipes-graphics/drm/libdrm/fix_O_CLOEXEC_undeclared.patch
 file_copy recipes-graphics/drm/libdrm/installtests.patch
+SOURCE_DIR=$GRAPHIC_SRC/poky/meta
+file_copy recipes-graphics/drm/libdrm/musl-ioctl.patch
+touch $GRAPHIC_DTS/imx8-graphic/recipes-graphics/drm/libdrm/0001-meson-add-libdrm-vivante-to-the-meson-meta-data.patch
+echo "From 45f48f8a5de59c04b0510c23853772bc970f411e Mon Sep 17 00:00:00 2001
+From: Max Krummenacher <max.krummenacher@toradex.com>
+Date: Thu, 9 Jan 2020 01:01:35 +0000
+Subject: [PATCH] meson: add libdrm-vivante to the meson meta data
 
-SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
+Upstream libdrm added the option to use meason as the buildsystem.
+Integrate Vivante into the relevant meson build information.
 
-file_copy recipes-graphics/drm/libdrm_2.4.99.imx.bb
+Upstream-Status: Pending
+
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+---
+ meson.build         | 14 +++++++++++++
+ meson_options.txt   |  7 +++++++
+ vivante/meson.build | 50 +++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 71 insertions(+)
+ create mode 100644 vivante/meson.build
+
+diff --git a/meson.build b/meson.build
+index e292554a..f4740634 100644
+--- a/meson.build
++++ b/meson.build
+@@ -157,6 +157,15 @@ if _vc4 != 'false'
+   with_vc4 = _vc4 == 'true' or ['arm', 'aarch64'].contains(host_machine.cpu_family())
+ endif
+
++with_vivante = false
++_vivante = get_option('vivante')
++if _vivante == 'true'
++  if not with_atomics
++    error('libdrm_vivante requires atomics.')
++  endif
++  with_vivante = true
++endif
++
+ # XXX: Apparently only freebsd and dragonfly bsd actually need this (and
+ # gnu/kfreebsd), not openbsd and netbsd
+ with_libkms = false
+@@ -312,6 +321,7 @@ install_headers(
+   'include/drm/savage_drm.h', 'include/drm/sis_drm.h',
+   'include/drm/tegra_drm.h', 'include/drm/vc4_drm.h',
+   'include/drm/via_drm.h', 'include/drm/virtgpu_drm.h',
++  'include/drm/vivante_drm.h',
+   subdir : 'libdrm',
+ )
+ if with_vmwgfx
+@@ -362,6 +372,9 @@ endif
+ if with_etnaviv
+   subdir('etnaviv')
+ endif
++if with_vivante
++  subdir('vivante')
++endif
+ if with_man_pages
+   subdir('man')
+ endif
+ @@ -382,5 +395,6 @@ message('  EXYNOS API     @0@'.format(with_exynos))
+ message('  Freedreno API  @0@ (kgsl: @1@)'.format(with_freedreno, with_freedreno_kgsl))
+ message('  Tegra API      @0@'.format(with_tegra))
+ message('  VC4 API        @0@'.format(with_vc4))
++message('  Vivante API    @0@'.format(with_etnaviv))
+ message('  Etnaviv API    @0@'.format(with_etnaviv))
+ message('')
+diff --git a/meson_options.txt b/meson_options.txt
+index 8af33f1c..dc69563d 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -95,6 +95,13 @@ option(
+   choices : ['true', 'false', 'auto'],
+   description : '''Enable support for vc4's KMS API.''',
+ )
++option(
++  'vivante',
++  type : 'combo',
++  value : 'false',
++  choices : ['true', 'false', 'auto'],
++  description : '''Enable support for vivante's propriatary experimental KMS API.''',
++)
+ option(
+   'etnaviv',
+   type : 'combo',
+diff --git a/vivante/meson.build b/vivante/meson.build
+new file mode 100644
+index 00000000..f6adb598
+--- /dev/null
++++ b/vivante/meson.build
+@@ -0,0 +1,50 @@
++# Copyright © 2017-2018 Intel Corporation
++
++# Permission is hereby granted, free of charge, to any person obtaining a copy
++# of this software and associated documentation files (the "Software"), to deal
++# in the Software without restriction, including without limitation the rights
++# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++# copies of the Software, and to permit persons to whom the Software is
++# furnished to do so, subject to the following conditions:
++
++# The above copyright notice and this permission notice shall be included in
++# all copies or substantial portions of the Software.
++
++# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++# SOFTWARE.
++
++
++libdrm_vivante = shared_library(
++  'drm_vivante',
++  [
++    files(
++      'vivante_bo.c',
++    ),
++    config_file
++  ],
++  include_directories : [inc_root, inc_drm],
++  link_with : libdrm,
++  c_args : libdrm_c_args,
++  dependencies : [dep_pthread_stubs, dep_rt, dep_atomic_ops],
++  version : '1.0.0',
++  install : true,
++)
++
++pkg.generate(
++  name : 'libdrm_vivante',
++  libraries : libdrm_vivante,
++  subdirs : ['.', 'libdrm'],
++  version : meson.project_version(),
++  requires_private : 'libdrm',
++  description : 'Userspace interface to Vivante kernel DRM services',
++)
++
++ext_libdrm_vivante = declare_dependency(
++  link_with : [libdrm, libdrm_vivante],
++  include_directories : [inc_drm, include_directories('.')],
++)" > $GRAPHIC_DTS/imx8-graphic/recipes-graphics/drm/libdrm/0001-meson-add-libdrm-vivante-to-the-meson-meta-data.patch 
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-sdk/
 file_copy recipes-graphics/gli/gli_0.8.2.0.bb
 file_copy recipes-graphics/gli/gli/0001-Set-C-standard-through-CMake-standard-options.patch
+file_copy recipes-graphics/glm/glm_0.9.8.5.bb
+file_copy recipes-graphics/glm/glm/Fixed-GCC-7.3-compile.patch
 
 if [ $PLATFORM_TYPE = "imx8qm" ]; then
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
-file_copy recipes-graphics/imx-dpu-g2d/imx-dpu-g2d_1.8.3.bb
+file_copy recipes-graphics/imx-dpu-g2d/imx-dpu-g2d_1.8.9.bb
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 file_copy recipes-graphics/imx-dpu-g2d/imx-dpu-g2d_1.7.0.bb \
 			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
-file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.4.0.p2.0.bb
+file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.4.3.p0.0.bb
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.2.4.p4.0.bb \
 			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
 
 elif [ $PLATFORM_TYPE = "imx8mm" ]; then
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
-file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.4.0.p2.0.bb
+file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.4.3.p0.0.bb
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.2.4.p4.0.bb \
                         "s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
 
 elif [ $PLATFORM_TYPE = "imx8qxp" ]; then
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
-file_copy recipes-graphics/imx-dpu-g2d/imx-dpu-g2d_1.8.3.bb
+file_copy recipes-graphics/imx-dpu-g2d/imx-dpu-g2d_1.8.9.bb
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 file_copy recipes-graphics/imx-dpu-g2d/imx-dpu-g2d_1.7.0.bb \
 			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
 fi
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
-file_copy recipes-graphics/imx-gpu-apitrace/imx-gpu-apitrace_8.0.0.bb
+file_copy recipes-graphics/imx-gpu-apitrace/imx-gpu-apitrace_9.0.0.bb
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-sdk/
-file_copy recipes-graphics/imx-gpu-sdk/imx-gpu-sdk_5.4.0.bb \
-			"s/'DISTRO_FEATURES', 'wayland'/'DISTRO_FEATURES', 'weston-demo'/g" \
-			"/glslang-native rapidvulkan vulkan-headers vulkan-loader/d" \
-			"16iDEPENDS_VULKAN_mx8   = \\\ " \
-			"17i\    \"\${@bb.utils.contains('DISTRO_FEATURES', 'weston-demo', 'glslang-native rapidvulkan vulkan-headers vulkan-loader', \\\ " \
-			"18i\        bb.utils.contains('DISTRO_FEATURES',     'x11',                      '', \\\ " \
-			"19i\                                                        'glslang-native rapidvulkan vulkan-headers vulkan-loader', d), d)}\"" \
-			"s/\\\ /\\\/g"
-
+file_copy recipes-graphics/imx-gpu-sdk/imx-gpu-sdk_5.6.1.bb \
+                        "/glslang-native rapidvulkan vulkan-headers vulkan-loader/d" \
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv/Add-dummy-libgl.patch
-file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv_6.4.0.p2.0-aarch64.bb \
+file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv_6.4.3.p0.0-aarch64.bb \
 			"s/fd4b227530cd88a82af6a5982cfb724d/6c12031a11b81db21cdfe0be88cac4b3/g" \
 			"s/f4005a4a2dba6a79d8f25547612aa3b9/7c2f504897e6b4495433546ab7d27912/g" \
 			"s/148e1b1a9e382a8159d5763dd2b08caad008eb931f3d925ac901c2438440d508/45852a5c3c61a9215a2ffb7387a6e1cce7ddac6f12513fc77459ad7e1f1b3a27/g"
-mv $GRAPHIC_DTS/imx8-graphic/recipes-graphics/imx-gpu-viv/imx-gpu-viv_6.4.0.p2.0-aarch64.bb \
-	 $GRAPHIC_DTS/imx8-graphic/recipes-graphics/imx-gpu-viv/imx-gpu-viv_6.4.0.p1.0-aarch64.bb
-file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv-v6.inc \
-			"s/recipes-graphics\/imx-gpu-viv\/imx-gpu-viv-6.inc/imx-gpu-viv-6.inc/g" \
-			"s/libnn-imx libnn-imx-dev/libnn-imx/g" \
-			"12iGLES3_HEADER_REMOVALS_mx8qxp_remove = \"gl32.h\"" \
-			"16iFILES_libvulkan-imx = \"\${libdir}/vulkan/libvulkan_VSI\${SOLIBS} \${libdir}/libSPIRV_viv\${SOLIBS}\"" \
-			"s/nnrt/NNRT/g" \
-			"/FILES_libvulkan-imx/G" \
-			"25d" \
-			"25iFILES_libopencl-imx = \"\${libdir}/libOpenCL\${SOLIBS} \\\ " \
-			"26i\                       \${libdir}/libVivanteOpenCL\${SOLIBS} \\\ " \
-			"27i\                       \${libdir}/libLLVM_viv\${SOLIBS} \\\ " \
-			"28i\                       \${sysconfdir}/OpenCL/vendors/Vivante.icd\"" \
-			"s/\\\ /\\\/g"
-
+file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv-6.inc \
+			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g" \
+			"/kernel-module-imx-gpu-viv/d"
+			
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
-file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv-6.inc \
-			"s/'DISTRO_FEATURES', 'wayland'/'DISTRO_FEATURES', 'weston-demo'/g" \
-			"s/\"DISTRO_FEATURES\", \"wayland\"/\"DISTRO_FEATURES\", \"weston-demo\"/g" \
-			"/RDEPENDS_libgal-imx/d" \
-			"s/2017-2019/2017-2018/g" \
-			"s/80c0478f4339af024519b3723023fe28/5ab1a30d0cd181e3408077727ea5a2db/g" \
-			"s/GLES3_HEADER_REMOVALS_mx8qxp = \"\"/GLES3_HEADER_REMOVALS_mx8qxp = \"gl32.h\"/g" \
-			"s/from vulkan-headers/from vulkan/g" \
-			"237,240d" \
-			"237i\        # Install the vulkan driver in a sub-folder. When installed in the same" \
-			"238i\        # folder as the vulkan loader layer library, an incorrect linkage is" \
-			"239i\        # created from libvulkan.so.1 to our library instead of the loader" \
-			"240i\        # layer library." \
-			"241i\        install -d \${D}\${libdir}/vulkan" \
-			"242i\        patchelf --set-soname libvulkan_VSI.so.1 \${D}\${libdir}/libvulkan-\${backend}.so" \
-			"243i\        mv \${D}\${libdir}/libvulkan-\${backend}.so \${D}\${libdir}/vulkan/libvulkan_VSI.so" \
-			"311,312d" \
-			"311iFILES_libvulkan-imx = \"\${libdir}/vulkan/libvulkan_VSI\${SOLIBS}\"" \
-			"312iFILES_libvulkan-imx-dev = \"\${includedir}/vulkan \${libdir}/vulkan/libvulkan_VSI\${SOLIBSDEV}\"" \
-			"313iINSANE_SKIP_libvulkan-imx += \"dev-deps dev-so\"" \
-			"344d" \
-			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
-
-
 file_copy recipes-graphics/mesa/mesa_%.bbappend \
 			"s/'DISTRO_FEATURES', 'wayland'/'DISTRO_FEATURES', 'weston-demo'/g" \
-			"50i\    rm -f \${D}\${includedir}/GL/glcorearb.h" \
+			"47,49d" \
+			"47i\    rm -f \${D}\${includedir}/GL/glcorearb.h" \
 			"\$a\\\n# Undo customization in meta-freescale that doesn't apply to 8DXL" \
 			"\$aPACKAGECONFIG_remove_mx8dxl = \"osmesa\"" \
 			"\$aDRIDRIVERS_remove_mx8dxl = \"swrast\""
@@ -460,7 +595,7 @@ SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-sdk/
 
 file_copy recipes-graphics/rapidopencl/rapidopencl_1.1.0.1.bb
 file_copy recipes-graphics/rapidopenvx/rapidopenvx_1.1.0.bb
-file_copy recipes-graphics/rapidvulkan/rapidvulkan_1.1.114.1000.bb
+file_copy recipes-graphics/rapidvulkan/rapidvulkan_1.2.141.2001.bb
 
 file_copy recipes-graphics/vulkan/spirv-tools_git.bb
 file_copy recipes-graphics/vulkan/spirv-tools/0001-Avoid-GCC8-warning-in-text_handler.cpp.-2197.patch
@@ -499,29 +634,37 @@ file_copy recipes-graphics/wayland/weston-init.bbappend \
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 file_copy recipes-graphics/wayland/weston-init/weston.ini
 file_copy recipes-graphics/wayland/weston-init/profile
+SOURCE_DIR=$GRAPHIC_SRC/poky/meta/
+file_copy recipes-graphics/wayland/weston-init.bb \
+		'49i\COMPATIBLE_MACHINE_nxp-imx8 = \"nxp-imx8\"' \	
+file_copy recipes-graphics/wayland/weston-init/weston-start
+file_copy recipes-graphics/wayland/weston-init/weston@.service
+file_copy recipes-graphics/wayland/weston-init/init
+file_copy recipes-graphics/wayland/weston-init/71-weston-drm.rules
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 file_copy recipes-graphics/wayland/weston-init/mx6sl/weston.config
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
-file_copy recipes-graphics/wayland/weston_7.0.0.imx.bb
+file_copy recipes-graphics/wayland/weston_8.0.0.imx.bb \
+			"1d" \
+			"s/weston-imx-8.0/weston-imx-9.0/g" \
+			"s/f13d40a3a0504a00baf2f28abe83b65dab8b2e10/a1823f20a1d6e24d2f56e98c5576eda34a94f567/g"	
+mv $GRAPHIC_DTS/imx8-graphic/recipes-graphics/wayland/weston_8.0.0.imx.bb $GRAPHIC_DTS/imx8-graphic/recipes-graphics/wayland/weston_9.0.0.bbappend
 file_copy recipes-graphics/wayland/weston/0001-weston-launch-Provide-a-default-version-that-doesn-t.patch
 file_copy recipes-graphics/wayland/weston/weston.desktop
 file_copy recipes-graphics/wayland/weston/weston.png
 file_copy recipes-graphics/wayland/weston/xwayland.weston-start
 
 file_copy recipes-graphics/wayland/wayland-protocols_1.18.imx.bb
-file_copy recipes-graphics/wayland/wayland-protocols/0001-linux-dmabuf-support-passing-buffer-DTRC-meta-to-com.patch
-file_copy recipes-graphics/wayland/wayland-protocols/0001-unstable-Add-alpha-compositing-protocol.patch
-file_copy recipes-graphics/wayland/wayland-protocols/0002-unstable-Add-hdr10-metadata-protocol.patch
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 file_copy recipes-graphics/wayland/wayland-protocols_1.17.imx.bb
 
 file_copy recipes-graphics/xorg-xserver/xserver-xorg_%.bbappend \
 			"\$a# Trailing space is intentional due to a bug in meta-freescale" \
-			"\$aSRC_URI += \"file://0001-glamor-Use-CFLAGS-for-EGL-and-GBM.patch \""
+			"\$aSRC_URI += \"file://0001-glamor-Use-CFLAGS-for-EGL-and-GBM.patch \"" \
+			"8d"
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 file_copy recipes-graphics/xorg-xserver/xserver-xorg/0001-glamor-Use-CFLAGS-for-EGL-and-GBM.patch
-file_copy recipes-graphics/xorg-xserver/xserver-xorg/0003-Remove-check-for-useSIGIO-option.patch
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 file_copy recipes-graphics/xorg-xserver/xserver-xf86-config_%.bbappend
@@ -531,11 +674,16 @@ file_copy recipes-graphics/xorg-xserver/xserver-xf86-config/imxdrm/xorg.conf
 
 file_copy recipes-kernel/linux/linux-imx-headers_5.4.bb \
 			"9iDEPENDS += \"rsync-native\"" \
-			"15,17d" \
-			"15iSRCBRANCH = \"v5.2/standard/nxp-imx/sdk-4.19.35/nxp-imx8\"" \
-			"16iKERNEL_SRC ?= \"git://\${LAYER_PATH_wrlinux}/git/linux-yocto.git;protocol=file\"" \
-			"17iSRC_URI = \"\${KERNEL_SRC};branch=\${SRCBRANCH}\"" \
-			"18iSRCREV = \"\${AUTOREV}\""
+			"11,14d" \
+			"11iSRCBRANCH = \"v5.4/standard/nxp-imx8\"" \
+			"12iKERNEL_SRC ?= \"git://\${LAYER_PATH_wrlinux}/git/linux-yocto.git;protocol=file\"" \
+			"13iSRC_URI = \"\${KERNEL_SRC};branch=\${SRCBRANCH}\"" \
+			"14iSRCREV = \"\${AUTOREV}\""
+
+SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
+file_copy recipes-graphics/waffle/waffle_%.bbappend
+file_copy recipes-graphics/waffle/waffle/0001-meson-Add-missing-wayland-dependency-on-EGL.patch
+file_copy recipes-graphics/waffle/waffle/0002-meson-Separate-surfaceless-option-from-x11.patch
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/
 file_copy EULA.txt
