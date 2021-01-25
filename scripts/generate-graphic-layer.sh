@@ -122,6 +122,8 @@ cat > $GRAPHIC_DTS/imx8-graphic/conf/layer.conf << "EOF"
 # We have a conf and classes directory, add to BBPATH
 BBPATH .= ":${LAYERDIR}"
 
+EXTENDED_WRLINUX_RECIPES_LIST = '${LAYERDIR}/conf/third_party_build.inc'
+
 require imx8-graphic.inc
 
 # We have a packages directory, add to BBFILES
@@ -244,6 +246,16 @@ WARN_TO_ERROR_QA = "already-stripped compile-host-path install-host-path \\
 WARN_QA_remove = "\${WARN_TO_ERROR_QA}"
 ERROR_QA_append = " \${WARN_TO_ERROR_QA}"
 
+EOF
+fi
+
+if [ ! -f $GRAPHIC_DTS/imx8-graphic/conf/third_party_build.inc ]; then
+	cat > $GRAPHIC_DTS/imx8-graphic/conf/third_party_build.inc << EOF
+WRLINUX_SUPPORTED_RECIPE_pn-imx-gpu-sdk ?= "0 "
+WRLINUX_SUPPORTED_RECIPE_pn-imx-gpu-viv ?= "0 "
+WRLINUX_SUPPORTED_RECIPE_pn-imx-gpu-g2d ?= "0 "
+WRLINUX_SUPPORTED_RECIPE_pn-imx-gpu-apitrace ?= "0 "
+WRLINUX_SUPPORTED_RECIPE_pn-imx-dpu-g2d ?= "0 "
 EOF
 fi
 
