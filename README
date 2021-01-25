@@ -24,7 +24,7 @@ is done automatically when using the Wind River configure wrapper.
 
 License
 -------
-Copyright (C) 2020 Wind River Systems, Inc.
+Copyright (C) 2021 Wind River Systems, Inc.
 
 Source code included in the tree for individual recipes is under the LICENSE
 stated in the associated recipe (.bb file) unless otherwise stated.
@@ -226,11 +226,7 @@ If you want to build a xwayland image, please follow the steps as below:
 	$ . ./environment-setup-<host>-wrlinuxsdk-linux
 	$ . ./oe-init-build-env <build>
 
-<3> Update the following to your local.conf file to configure the project:
-
-	WRTEMPLATE ?= "feature/weston-demo"
-
-<4> Use the command as below to build a xwayland image:
+<3> Use the command as below to build a xwayland image:
 
 	bitbake wrlinux-image-std-sato
 
@@ -240,10 +236,10 @@ Because of the licesen issue, nxp-imx8 layer doesn't integrate imx8's GPU(GC7000
 hardware acceleration related packages into WRlinux product. So, if customer wants
 to run hardware graphic feature, please generate graphic with script scripts/generate-graphic-layer.sh.
 Detail steps as below:
-<1> Download SDK package(L5.4.3-1.0.0) with below command:
+<1> Download SDK package(imx-5.4.47-2.2.0) with below command:
 	# mkdir imx-yocto-bsp
 	# cd imx-yocto-bsp
-	# repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-zeus -m imx-5.4.3-1.0.0.xml
+	# repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-zeus -m imx-5.4.47-2.2.0.xml
 	# repo sync
 
 <2> Run script scripts/generate-graphic-layer.sh and input correct parameter:
@@ -337,7 +333,7 @@ Execute the following commands to validate the WiFi cards:
 
 NOTE: the PCIe driver does not support hotplug and suspend/resume.
 
-5.8 FLEXCAN (MCIMX8QXP-MEK)
+5.8 FLEXCAN (MCIMX8QXP-MEK & MCIMX8QM-MEK)
 ---------------------------
 
 Detail verification commands as below:
@@ -371,17 +367,8 @@ For the boot kernel:
 To reserve a memory region for the capture kernel, you need to pass the bootargs
 argument "crashkernel" to the boot kernel as follow:
 
-For MCIMX8M-EVK board:
-	crashkernel=512M@3000M
-
 For MCIMX8QM-MEK board:
 	crashkernel=512M
-
-For MCIMX8MMINI-EVK board:
-	crashkernel=512M
-
-For MCIMX8QXP-MEK board:
-        crashkernel=512M@0
 
 For the dump-capture kernel:
 Before booting the dump-capture kernel, add "maxcpus=1 cma=128M" to the boot parameter.
@@ -400,7 +387,7 @@ partitioned image on a SD card. The wic command
 generates partitioned images from existing OpenEmbedded build artifacts.
 User can refer to the below URL to get more WIC details:
 
-http://www.yoctoproject.org/docs/2.2/mega-manual/mega-manual.html#creating-partitioned-images
+http://www.yoctoproject.org/docs/2.6/mega-manual/mega-manual.html#creating-partitioned-images
 
 This BSP supports disk images for SD card.
 After build the project, user will get a WIC image under the directory
@@ -422,7 +409,7 @@ To burn uboot and WIC images to SD card, user need to execute two steps:
 2) Prepare the bootloader image imx-boot-<$machine>-sd.bin. User can build
    a SDK to obtain the bootloader by executing the commands as below:
 
-$repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-warrior -m imx-4.19.35-1.1.0.xml
+$repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-warrior -m imx-5.4.47-2.2.0.xml
 $repo sync
 $DISTRO=fsl-imx-xwayland MACHINE=imx8mqevk source fsl-setup-release.sh -b build-xwayland
 $bitbake imx-boot
@@ -430,35 +417,17 @@ $bitbake imx-boot
 3) The imx-boot-<$machine>-sd.bin in SDK can be found in build-wayland/tmp/deploy/images/<$machine>/,
    and then use the command as below to burn it to SD card:
 
-For MCIMX8M-EVK board:
-
-	# dd if=imx-boot-<$machine>-sd.bin-flash_evk of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
-
-Note: $machine = "imx8mqevk", seek = "33"
-
 For MCIMX8QM-MEK board:
 
 	# dd if=imx-boot-<$machine>-sd.bin-flash_linux_m4 of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
 
 Note: $machine = "imx8qmmek", seek = "32"
 
-For MCIMX8MM-EVK board:
-
-	# dd if=imx-boot-<$machine>-sd.bin-flash_evk of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
-
-Note: $machine = "imx8mmevk", seek = "33"
-
-For MCIMX8QXP-MEK board:
-
-        # dd if=imx-boot-<$machine>-sd.bin-flash_spl of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
-
-Note: $machine = "imx8qxp", seek = "32"
-
 4) Set environment variable for booting system
 
-u-boot=>setenv fdt_file fsl-imx8mq-evk-b3.dtb
+u-boot=>setenv fdt_file fsl-imx8qm-mek.dtb
 u-boot=>setenv bootfile Image
-u-boot=>setenv bootargs 'root=/dev/mmcblk1p2 rw rootdelay=5 console=ttymxc0,115200n8 ip=dhcp'
+u-boot=>setenv bootargs 'root=/dev/mmcblk1p2 rootwait rw rootdelay=5 console=${console},${baudrate} earlycon ip=dhcp'
 u-boot=>setenv bootcmd 'fatload mmc 1:1 $loadaddr $bootfile; fatload mmc 1:1 $fdt_addr $fdt_file; booti $loadaddr - $fdt_addr';
 u-boot=>run bootcmd
 
