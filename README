@@ -419,7 +419,7 @@ $bitbake imx-boot
 
 For MCIMX8QM-MEK board:
 
-	# dd if=imx-boot-<$machine>-sd.bin-flash_linux_m4 of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
+	# dd if=imx-boot-<$machine>-sd.bin-flash_spl of=/dev/your_sd_dev bs=1k seek=<x> conv=fsync
 
 Note: $machine = "imx8qmmek", seek = "32"
 
