@@ -261,7 +261,7 @@ Use the command as below to add i.mx8 GPU graphic layer:
 
 	bitbake-layers add-layer path_to_WRLinux_product/layers/nxp-imx8/imx8-graphic
 
-<4> Following the instruction in Section 5.6.1 to build a xwayland image.
+<4> Following the instruction in Section 5.5.1 to build a xwayland image.
 
 NOTE:
 
