@@ -145,7 +145,7 @@ IMX_MIRROR ?= "https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/"
 FSL_MIRROR ?= "${IMX_MIRROR}"
 FSL_EULA_FILE_GRAPHIC = "${LAYERDIR}/EULA"
 
-LAYERSERIES_COMPAT_imx8-graphic-layer = "wrl dunfell gatesgarth"
+LAYERSERIES_COMPAT_imx8-graphic-layer = "wrl hardknott"
 DISTRO_FEATURES_append = " imx8-graphic"
 EOF
 fi
@@ -310,10 +310,14 @@ file_copy classes/fsl-eula-unpack.bbclass \
 			"s/FSL_EULA_FILE/FSL_EULA_FILE_GRAPHIC/g" \
 			'30i\FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V13 = \"1b4db4b25c3a1e422c0c0ed64feb65d2\"' \
 			'31i\FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V15 = \"983e4c77621568488dd902b27e0c2143\"' \
-			'53a\    ${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V13} \\' \
-			'54a\    ${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V15} \\' \
-			"60d" \
-			'60i\    "${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V15}"'
+			'32i\FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V16 = \"e9e880185bda059c90c541d40ceca922\"' \
+			'33i\FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V17 = \"cf3f9b8d09bc3926b1004ea71f7a248a\"' \
+			'55a\    ${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V13} \\' \
+			'56a\    ${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V15} \\' \
+			'57a\    ${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V16} \\' \
+                        '58a\    ${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V17} \\' \
+			"64d" \
+			'64i\    "${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V17}"'
 mv $GRAPHIC_DTS/imx8-graphic/classes/fsl-eula-unpack.bbclass $GRAPHIC_DTS/imx8-graphic/classes/fsl-eula-unpack-graphic.bbclass
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-sdk/
@@ -326,7 +330,7 @@ file_copy classes/use-imx-headers.bbclass
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 
-file_copy recipes-bsp/imx-vpu-hantro/imx-vpu-hantro_1.19.0.bb
+file_copy recipes-bsp/imx-vpu-hantro/imx-vpu-hantro_1.20.0.bb
 file_copy recipes-bsp/imx-vpu-hantro/imx-vpu-hantro.inc \
 			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
 
@@ -336,7 +340,8 @@ file_copy recipes-core/systemd/systemd_%.bbappend \
 
 file_copy recipes-core/systemd/systemd-gpuconfig/gpuconfig
 file_copy recipes-core/systemd/systemd-gpuconfig/gpuconfig.service
-file_copy recipes-core/systemd/systemd-gpuconfig_1.0.bb
+file_copy recipes-core/systemd/systemd-gpuconfig_1.0.bb \
+			"s/GPL-2.0/GPL-2.0-only/g"
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-sdk/
 
@@ -350,7 +355,8 @@ file_copy recipes-graphics/cairo/cairo_%.bbappend
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-sdk/
 
-file_copy recipes-graphics/devil/devil_1.8.0.bb
+file_copy recipes-graphics/devil/devil_1.8.0.bb \
+			"s/LGPL-2.1/LGPL-2.1-only/g"
 file_copy recipes-graphics/devil/devil_%.bbappend
 file_copy recipes-graphics/devil/devil/0001-CMakeLists-Use-CMAKE_INSTALL_LIBDIR-for-install-libs.patch
 
@@ -544,27 +550,27 @@ file_copy recipes-graphics/glm/glm/Fixed-GCC-7.3-compile.patch
 
 if [ $PLATFORM_TYPE = "imx8qm" ]; then
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
-file_copy recipes-graphics/imx-dpu-g2d/imx-dpu-g2d_1.8.9.bb
+file_copy recipes-graphics/imx-dpu-g2d/imx-dpu-g2d_1.8.12.bb
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 file_copy recipes-graphics/imx-dpu-g2d/imx-dpu-g2d_1.7.0.bb \
 			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
-file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.4.3.p0.0.bb
+file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.4.3.p1.0.bb
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.2.4.p4.0.bb \
 			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
 
 elif [ $PLATFORM_TYPE = "imx8mm" ]; then
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
-file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.4.3.p0.0.bb
+file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.4.3.p1.0.bb
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.2.4.p4.0.bb \
                         "s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
 
 elif [ $PLATFORM_TYPE = "imx8qxp" ]; then
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
-file_copy recipes-graphics/imx-dpu-g2d/imx-dpu-g2d_1.8.9.bb
+file_copy recipes-graphics/imx-dpu-g2d/imx-dpu-g2d_1.8.12.bb
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 file_copy recipes-graphics/imx-dpu-g2d/imx-dpu-g2d_1.7.0.bb \
 			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
@@ -574,12 +580,12 @@ SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 file_copy recipes-graphics/imx-gpu-apitrace/imx-gpu-apitrace_9.0.0.bb
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-sdk/
-file_copy recipes-graphics/imx-gpu-sdk/imx-gpu-sdk_5.6.1.bb \
+file_copy recipes-graphics/imx-gpu-sdk/imx-gpu-sdk_5.6.2.bb \
                         "/glslang-native rapidvulkan vulkan-headers vulkan-loader/d" \
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv/Add-dummy-libgl.patch
-file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv_6.4.3.p0.0-aarch64.bb \
+file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv_6.4.3.p1.0-aarch64.bb \
 			"s/fd4b227530cd88a82af6a5982cfb724d/6c12031a11b81db21cdfe0be88cac4b3/g" \
 			"s/f4005a4a2dba6a79d8f25547612aa3b9/7c2f504897e6b4495433546ab7d27912/g" \
 			"s/148e1b1a9e382a8159d5763dd2b08caad008eb931f3d925ac901c2438440d508/45852a5c3c61a9215a2ffb7387a6e1cce7ddac6f12513fc77459ad7e1f1b3a27/g"
@@ -592,10 +598,11 @@ SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 file_copy recipes-graphics/mesa/mesa_%.bbappend \
 			"s/'DISTRO_FEATURES', 'wayland'/'DISTRO_FEATURES', 'weston-demo'/g" \
 			"47,49d" \
+			"31,33d" \
 			"47i\    rm -f \${D}\${includedir}/GL/glcorearb.h" \
 			"\$a\\\n# Undo customization in meta-freescale that doesn't apply to 8DXL" \
 			"\$aPACKAGECONFIG_remove_mx8dxl = \"osmesa\"" \
-			"\$aDRIDRIVERS_remove_mx8dxl = \"swrast\""
+			"\$aDRIDRIVERS_remove = \"swrast\""
 
 file_copy recipes-graphics/mesa/mesa-demos/Add-OpenVG-demos-to-support-wayland.patch
 file_copy recipes-graphics/mesa/mesa-demos/fix-clear-build-break.patch
@@ -657,17 +664,15 @@ SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 file_copy recipes-graphics/wayland/weston-init/mx6sl/weston.config
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
-file_copy recipes-graphics/wayland/weston_8.0.0.imx.bb \
-			"1d" \
-			"s/weston-imx-8.0/weston-imx-9.0/g" \
-			"s/f13d40a3a0504a00baf2f28abe83b65dab8b2e10/a1823f20a1d6e24d2f56e98c5576eda34a94f567/g"	
-mv $GRAPHIC_DTS/imx8-graphic/recipes-graphics/wayland/weston_8.0.0.imx.bb $GRAPHIC_DTS/imx8-graphic/recipes-graphics/wayland/weston_9.0.0.bbappend
+file_copy recipes-graphics/wayland/weston_9.0.0.imx.bb
+file_copy recipes-graphics/wayland/weston_9.0.0.bb
 file_copy recipes-graphics/wayland/weston/0001-weston-launch-Provide-a-default-version-that-doesn-t.patch
+file_copy recipes-graphics/wayland/weston/0001-tests-include-fcntl.h-for-open-O_RDWR-O_CLOEXEC-and-.patch
 file_copy recipes-graphics/wayland/weston/weston.desktop
 file_copy recipes-graphics/wayland/weston/weston.png
 file_copy recipes-graphics/wayland/weston/xwayland.weston-start
 
-file_copy recipes-graphics/wayland/wayland-protocols_1.18.imx.bb
+file_copy recipes-graphics/wayland/wayland-protocols_1.20.imx.bb
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 file_copy recipes-graphics/wayland/wayland-protocols_1.17.imx.bb
 
