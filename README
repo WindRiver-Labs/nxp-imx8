@@ -97,19 +97,19 @@ and are copied to the export directory of the TFTP server.
 ------------------
 For MCIMX8QM-MEK board:
 	If you want to connect HDMI monitor to MIPI DSI1(J4) or DSI0(J9):
-	# tftp $fdt_addr fsl-imx8qm-mek.dtb
+	# tftp $fdt_addr imx8qm-mek.dtb
 
 	If you want to connect HDMI monitor to HDMI TX (J6):
-	# tftp $fdt_addr fsl-imx8qm-mek-hdmi.dtb
+	# tftp $fdt_addr imx8qm-mek-hdmi.dtb
 
 	If you want to connect 2 HDMI monitors to HDMI TX (J6) and HDMI RX (J1):
-	# tftp $fdt_addr fsl-imx8qm-mek-hdmi-in.dtb
+	# tftp $fdt_addr imx8qm-mek-hdmi-in.dtb
 
 	If you want to connect OLED screen to MIPI DSI1(J4) or DSI0(J9):
-	# tftp $fdt_addr fsl-imx8qm-mek-dsi-rm67191.dtb
+	# tftp $fdt_addr imx8qm-mek-dsi-rm67191.dtb
 
 	If you want to connect OV5640 MIPI camera to MIPI CSI1(J5) or CSI0(J10):
-	# tftp $fdt_addr fsl-imx8qm-mek-ov5640.dtb
+	# tftp $fdt_addr imx8qm-mek-ov5640.dtb
 
 4.1.4 Download and load firmware
 --------------------------------
