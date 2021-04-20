@@ -409,9 +409,9 @@ To burn uboot and WIC images to SD card, user need to execute two steps:
 2) Prepare the bootloader image imx-boot-<$machine>-sd.bin. User can build
    a SDK to obtain the bootloader by executing the commands as below:
 
-$repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-warrior -m imx-5.4.47-2.2.0.xml
+$repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-zeus -m imx-5.4.70-2.3.0.xml
 $repo sync
-$DISTRO=fsl-imx-xwayland MACHINE=imx8mqevk source fsl-setup-release.sh -b build-xwayland
+$DISTRO=fsl-imx-xwayland MACHINE=imx8qmmek source imx-setup-release.sh -b build-xwayland
 $bitbake imx-boot
 
 3) The imx-boot-<$machine>-sd.bin in SDK can be found in build-wayland/tmp/deploy/images/<$machine>/,
@@ -425,7 +425,7 @@ Note: $machine = "imx8qmmek", seek = "32"
 
 4) Set environment variable for booting system
 
-u-boot=>setenv fdt_file fsl-imx8qm-mek.dtb
+u-boot=>setenv fdt_file imx8qm-mek.dtb
 u-boot=>setenv bootfile Image
 u-boot=>setenv bootargs 'root=/dev/mmcblk1p2 rootwait rw rootdelay=5 console=${console},${baudrate} earlycon ip=dhcp'
 u-boot=>setenv bootcmd 'fatload mmc 1:1 $loadaddr $bootfile; fatload mmc 1:1 $fdt_addr $fdt_file; booti $loadaddr - $fdt_addr';
