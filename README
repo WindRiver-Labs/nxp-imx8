@@ -427,8 +427,8 @@ Note: $machine = "imx8qmmek", seek = "32"
 
 u-boot=>setenv fdt_file imx8qm-mek.dtb
 u-boot=>setenv bootfile Image
-u-boot=>setenv bootargs 'root=/dev/mmcblk1p2 rootwait rw rootdelay=5 console=${console},${baudrate} earlycon ip=dhcp'
-u-boot=>setenv bootcmd 'fatload mmc 1:1 $loadaddr $bootfile; fatload mmc 1:1 $fdt_addr $fdt_file; booti $loadaddr - $fdt_addr';
+u-boot=>setenv bootargs "root=/dev/mmcblk1p2 rootwait rw rootdelay=5 console=${console},${baudrate} earlycon ip=dhcp"
+u-boot=>setenv bootcmd "fatload mmc 1:1 $loadaddr $bootfile; fatload mmc 1:1 $fdt_addr $fdt_file; booti $loadaddr - $fdt_addr";
 u-boot=>run bootcmd
 
 8. USB OTG
