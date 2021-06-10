@@ -26,7 +26,7 @@ echo
 
 usage()
 {
-    echo "\n Usage: source generate-graphic-layer.sh
+    echo "Usage: source generate-graphic-layer.sh
     Optional parameters: [-s source-dir] [-d destination-dir] [-p platform-type] [-h]"
     echo "
     * [-s source-dir]: Source directory where the graphic layer come from
@@ -691,8 +691,8 @@ file_copy recipes-graphics/xorg-xserver/xserver-xf86-config/imxdrm/xorg.conf
 
 file_copy recipes-kernel/linux/linux-imx-headers_5.4.bb \
 			"9iDEPENDS += \"rsync-native\"" \
-			"11,14d" \
-			"11iSRCBRANCH = \"v5.4/standard/nxp-imx8\"" \
+			"11,16d" \
+			"11iSRCBRANCH = \"v5.10/standard/nxp-sdk-5.4/nxp-imx8\"" \
 			"12iKERNEL_SRC ?= \"git://\${LAYER_PATH_wrlinux}/git/linux-yocto.git;protocol=file\"" \
 			"13iSRC_URI = \"\${KERNEL_SRC};branch=\${SRCBRANCH}\"" \
 			"14iSRCREV = \"\${AUTOREV}\""
