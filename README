@@ -236,10 +236,10 @@ Because of the licesen issue, nxp-imx8 layer doesn't integrate imx8's GPU(GC7000
 hardware acceleration related packages into WRlinux product. So, if customer wants
 to run hardware graphic feature, please generate graphic with script scripts/generate-graphic-layer.sh.
 Detail steps as below:
-<1> Download SDK package(imx-5.4.47-2.2.0) with below command:
+<1> Download SDK package(5.10.9-1.0.0) with below command:
 	# mkdir imx-yocto-bsp
 	# cd imx-yocto-bsp
-	# repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-zeus -m imx-5.4.47-2.2.0.xml
+	# repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-gatesgarth -m imx-5.10.9-1.0.0.xml
 	# repo sync
 
 <2> Run script scripts/generate-graphic-layer.sh and input correct parameter:
@@ -409,7 +409,7 @@ To burn uboot and WIC images to SD card, user need to execute two steps:
 2) Prepare the bootloader image imx-boot-<$machine>-sd.bin. User can build
    a SDK to obtain the bootloader by executing the commands as below:
 
-$repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-zeus -m imx-5.4.70-2.3.0.xml
+$repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-gatesgarth -m imx-5.10.9-1.0.0.xml
 $repo sync
 $DISTRO=fsl-imx-xwayland MACHINE=imx8qmmek source imx-setup-release.sh -b build-xwayland
 $bitbake imx-boot
