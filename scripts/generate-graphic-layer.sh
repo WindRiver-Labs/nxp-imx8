@@ -312,16 +312,19 @@ file_copy classes/fsl-eula-unpack.bbclass \
 			'31i\FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V15 = \"983e4c77621568488dd902b27e0c2143\"' \
 			'32i\FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V16 = \"e9e880185bda059c90c541d40ceca922\"' \
 			'33i\FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V17 = \"cf3f9b8d09bc3926b1004ea71f7a248a\"' \
-			'55a\    ${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V13} \\' \
-			'56a\    ${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V15} \\' \
-			'57a\    ${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V16} \\' \
-                        '58a\    ${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V17} \\' \
-			"64d" \
-			'64i\    "${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V17}"'
+			'34i\FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V18 = \"231e11849a4331fcbb19d7f4aab4a659\"' \
+			'35i\FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V19 = \"a632fefd1c359980434f9389833cab3a\"' \
+			'57a\    ${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V13} \\' \
+			'58a\    ${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V15} \\' \
+			'59a\    ${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V16} \\' \
+                        '60a\    ${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V17} \\' \
+			'64i\    ${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V18} \\' \
+                        '65i\    ${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V19} \\' \
+			'70d' \
+			'70i\    "${FSL_EULA_FILE_GRAPHIC_MD5SUM_LA_OPT_NXP_SOFTWARE_LICENSE_V19}"'
 mv $GRAPHIC_DTS/imx8-graphic/classes/fsl-eula-unpack.bbclass $GRAPHIC_DTS/imx8-graphic/classes/fsl-eula-unpack-graphic.bbclass
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-sdk/
-file_copy classes/features_check.bbclass
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 
@@ -330,7 +333,7 @@ file_copy classes/use-imx-headers.bbclass
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 
-file_copy recipes-bsp/imx-vpu-hantro/imx-vpu-hantro_1.20.0.bb
+file_copy recipes-bsp/imx-vpu-hantro/imx-vpu-hantro_1.21.0.bb
 file_copy recipes-bsp/imx-vpu-hantro/imx-vpu-hantro.inc \
 			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
 
@@ -362,46 +365,8 @@ file_copy recipes-graphics/devil/devil/0001-CMakeLists-Use-CMAKE_INSTALL_LIBDIR-
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 
-file_copy recipes-graphics/drm/libdrm_%.bbappend
-file_copy recipes-graphics/drm/libdrm_2.4.91.imx.bb \
-			"s/libpthread-stubs libpciaccess/libpthread-stubs/g" \
-			"s/libdrm-imx-2.4.91/libdrm-imx-2.4.99/g" \
-			"16,20d" \
-			'16i\	file://musl-ioctl.patch \\' \
-			'17i\	file://0001-meson-add-libdrm-vivante-to-the-meson-meta-data.patch "' \
-			"s/95645843f59495387a072d48374718f22e69d7a4/f421c9c8c4b8fe48d9e6ef43910e98569c94a4b2/g" \
-			"s/autotools/meson/g" \
-			"25,31d" \
-			'25i\PACKAGECONFIG ??= "libkms intel radeon amdgpu nouveau vmwgfx omap freedreno vc4 etnaviv install-test-programs"' \
-			'26i\PACKAGECONFIG[libkms] = "-Dlibkms=true,-Dlibkms=false"' \
-			'27i\PACKAGECONFIG[intel] = "-Dintel=true,-Dintel=false,libpciaccess"' \
-			'28i\PACKAGECONFIG[radeon] = "-Dradeon=true,-Dradeon=false"' \
-			'29i\PACKAGECONFIG[amdgpu] = "-Damdgpu=true,-Damdgpu=false"' \
-			'30i\PACKAGECONFIG[nouveau] = "-Dnouveau=true,-Dnouveau=false"' \
-			'31i\PACKAGECONFIG[vmwgfx] = "-Dvmwgfx=true,-Dvmwgfx=false"' \
-			'32i\PACKAGECONFIG[omap] = "-Domap=true,-Domap=false"' \
-			'33i\PACKAGECONFIG[exynos] = "-Dexynos=true,-Dexynos=false"' \
-			'34i\PACKAGECONFIG[freedreno] = "-Dfreedreno=true,-Dfreedreno=false"' \
-			'35i\PACKAGECONFIG[tegra] = "-Dtegra=true,-Dtegra=false"' \
-			'36i\PACKAGECONFIG[vc4] = "-Dvc4=true,-Dvc4=false"' \
-			'37i\PACKAGECONFIG[etnaviv] = "-Detnaviv=true,-Detnaviv=false"' \
-			'38i\PACKAGECONFIG[freedreno-kgsl] = "-Dfreedreno-kgsl=true,-Dfreedreno-kgsl=false"' \
-			'39i\PACKAGECONFIG[valgrind] = "-Dvalgrind=true,-Dvalgrind=false,valgrind"' \
-			'40i\PACKAGECONFIG[install-test-programs] = "-Dinstall-test-programs=true,-Dinstall-test-programs=false"' \
-			'41i\PACKAGECONFIG[cairo-tests] = "-Dcairo-tests=true,-Dcairo-tests=false"' \
-			'42i\PACKAGECONFIG[udev] = "-Dudev=true,-Dudev=false,udev"' \
-			"s/'--enable-manpages', '--disable-manpages'/'-Dman-pages=true', '-Dman-pages=false'/g" \
-			"s/EXTRA_OECONF_append_imxgpu = \" --enable-vivante-experimental-api\"/BBCLASSEXTEND = \"native nativesdk\"/g" \
-			'69a\PACKAGECONFIG_append_imxgpu = " vivante"' \
-			'70a\PACKAGECONFIG[vivante] = "-Dvivante=true,-Dvivante=false"' \
-			"s/--enable-manpages/-Dman-pages=true/g" \
-			"s/--disable-manpages/-Dman-pages=false/g"
-mv $GRAPHIC_DTS/imx8-graphic/recipes-graphics/drm/libdrm_2.4.91.imx.bb $GRAPHIC_DTS/imx8-graphic/recipes-graphics/drm/libdrm_2.4.99.imx.bb
-file_copy recipes-graphics/drm/libdrm/imxgpu2d/drm-update-arm.patch
-file_copy recipes-graphics/drm/libdrm/0001-configure.ac-Allow-explicit-enabling-of-cunit-tests.patch
-file_copy recipes-graphics/drm/libdrm/fix_O_CLOEXEC_undeclared.patch
-file_copy recipes-graphics/drm/libdrm/installtests.patch
-SOURCE_DIR=$GRAPHIC_SRC/poky/meta
+file_copy recipes-graphics/drm/libdrm_2.4.99.imx.bb
+file_copy recipes-graphics/drm/libdrm/0001-meson-add-libdrm-vivante-to-the-meson-meta-data.patch
 file_copy recipes-graphics/drm/libdrm/musl-ioctl.patch
 touch $GRAPHIC_DTS/imx8-graphic/recipes-graphics/drm/libdrm/0001-meson-add-libdrm-vivante-to-the-meson-meta-data.patch
 echo "From 45f48f8a5de59c04b0510c23853772bc970f411e Mon Sep 17 00:00:00 2001
@@ -543,29 +508,63 @@ index 00000000..f6adb598
 +)" > $GRAPHIC_DTS/imx8-graphic/recipes-graphics/drm/libdrm/0001-meson-add-libdrm-vivante-to-the-meson-meta-data.patch 
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-sdk/
-file_copy recipes-graphics/gli/gli_0.8.2.0.bb
+file_copy recipes-graphics/gli/gli_0.8.2.0.bb \
+				'15i\    file://0001-Fix-build-error-Ordered-comparison-of-pointer-with-i.patch \\'
 file_copy recipes-graphics/gli/gli/0001-Set-C-standard-through-CMake-standard-options.patch
 file_copy recipes-graphics/glm/glm_0.9.8.5.bb
 file_copy recipes-graphics/glm/glm/Fixed-GCC-7.3-compile.patch
+mkdir -p $GRAPHIC_DTS/imx8-graphic/recipes-graphics/gli/files
+touch $GRAPHIC_DTS/imx8-graphic/recipes-graphics/gli/gli/0001-Fix-build-error-Ordered-comparison-of-pointer-with-i.patch
+echo "From e19ce2b0a962c51f7a2562ef52e379c7459d4f9d Mon Sep 17 00:00:00 2001
+From: Xiaolei Wang <xiaolei.wang@windriver.com>
+Date: Fri, 23 Jul 2021 14:43:38 +0800
+Subject: [PATCH] Fix build error Ordered comparison of pointer with integer
+
+Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
+---
+ test/core/core_convert.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/test/core/core_convert.cpp b/test/core/core_convert.cpp
+index 66af62fb..c003fef6 100644
+--- a/test/core/core_convert.cpp
++++ b/test/core/core_convert.cpp
+@@ -32,7 +32,7 @@ bool convert_rgb32f_rgb9e5(const char* FilenameSrc, const char* FilenameDst)
+ {
+ 	if(FilenameDst == NULL)
+ 		return false;
+-	if(std::strstr(FilenameDst, \".dds\") > 0 || std::strstr(FilenameDst, \".ktx\") > 0)
++	if(std::strstr(FilenameDst, \".dds\") != 0 || std::strstr(FilenameDst, \".ktx\") != 0)
+ 		return false;
+ 
+ 	gli::texture2d TextureSource(gli::load(FilenameSrc));
+-- 
+2.25.1" > $GRAPHIC_DTS/imx8-graphic/recipes-graphics/gli/gli/0001-Fix-build-error-Ordered-comparison-of-pointer-with-i.patch
+mkdir -p $GRAPHIC_DTS/imx8-graphic/recipes-graphics/rapidjson
+touch $GRAPHIC_DTS/imx8-graphic/recipes-graphics/rapidjson/rapidjson_git.bbappend
+echo "FILES_\${PN}-dev += \"\${libdir_native}/*\"" > $GRAPHIC_DTS/imx8-graphic/recipes-graphics/rapidjson/rapidjson_git.bbappend
 
 if [ $PLATFORM_TYPE = "imx8qm" ]; then
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
-file_copy recipes-graphics/imx-dpu-g2d/imx-dpu-g2d_1.8.12.bb
+file_copy recipes-graphics/imx-dpu-g2d/imx-dpu-g2d_1.9.0.bb \
+			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
-file_copy recipes-graphics/imx-dpu-g2d/imx-dpu-g2d_1.7.0.bb \
+file_copy recipes-graphics/imx-dpu-g2d/imx-dpu-g2d_1.8.7.bb \
 			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
-file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.4.3.p1.0.bb
+file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.4.3.p1.2.bb \
+			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
-file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.2.4.p4.0.bb \
+file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.4.0.p2.4.bb \
 			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
 
 elif [ $PLATFORM_TYPE = "imx8mm" ]; then
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
-file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.4.3.p1.0.bb
+file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.4.3.p1.2.bb \
+			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
-file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.2.4.p4.0.bb \
+file_copy recipes-graphics/imx-gpu-g2d/imx-gpu-g2d_6.4.0.p2.4.bb \
                         "s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
 
 elif [ $PLATFORM_TYPE = "imx8qxp" ]; then
@@ -582,13 +581,86 @@ file_copy recipes-graphics/imx-gpu-apitrace/imx-gpu-apitrace_9.0.0.bb
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-sdk/
 file_copy recipes-graphics/imx-gpu-sdk/imx-gpu-sdk_5.6.2.bb \
                         "/glslang-native rapidvulkan vulkan-headers vulkan-loader/d" \
+			"44i\SRC_URI += \"file://0001-Fix-build-warning-for-C-11.patch \"" \	
+mkdir -p $GRAPHIC_DTS/imx8-graphic/recipes-graphics/imx-gpu-sdk/files
+touch $GRAPHIC_DTS/imx8-graphic/recipes-graphics/imx-gpu-sdk/files/0001-Fix-build-warning-for-C-11.patch
+echo "From e6732b1bf9e0b44daf92d7b12075c8d3ccc70c81 Mon Sep 17 00:00:00 2001
+From: Xiaolei Wang <xiaolei.wang@windriver.com>
+Date: Thu, 22 Jul 2021 11:27:31 +0800
+Subject: [PATCH] Fix build warning for C++ 11
+
+Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
+---
+ .../include/Shared/ObjectSelection/BoundingBoxUtil.hpp        | 1 +
+ .../source/Shared/ObjectSelection/BoundingBoxUtil.cpp         | 1 +
+ .../source/FslGraphics3D/SceneFormat/Conversion.cpp           | 1 +
+ .../Base/source/FslSimpleUI/Base/Layout/GridLayout.cpp        | 4 ++--
+ 4 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/DemoApps/Shared/ObjectSelection/include/Shared/ObjectSelection/BoundingBoxUtil.hpp b/DemoApps/Shared/ObjectSelection/include/Shared/ObjectSelection/BoundingBoxUtil.hpp
+index 03cb940f..56cd0583 100644
+--- a/DemoApps/Shared/ObjectSelection/include/Shared/ObjectSelection/BoundingBoxUtil.hpp
++++ b/DemoApps/Shared/ObjectSelection/include/Shared/ObjectSelection/BoundingBoxUtil.hpp
+@@ -34,6 +34,7 @@
+ #include <FslBase/Math/BoundingBox.hpp>
+ #include <FslBase/Math/Matrix.hpp>
+ #include <vector>
++#include <limits>
+ 
+ namespace Fsl
+ {
+diff --git a/DemoApps/Shared/ObjectSelection/source/Shared/ObjectSelection/BoundingBoxUtil.cpp b/DemoApps/Shared/ObjectSelection/source/Shared/ObjectSelection/BoundingBoxUtil.cpp
+index 029f56eb..cd854641 100644
+--- a/DemoApps/Shared/ObjectSelection/source/Shared/ObjectSelection/BoundingBoxUtil.cpp
++++ b/DemoApps/Shared/ObjectSelection/source/Shared/ObjectSelection/BoundingBoxUtil.cpp
+@@ -32,6 +32,7 @@
+ #include <Shared/ObjectSelection/BoundingBoxUtil.hpp>
+ #include <FslBase/Math/Vector4.hpp>
+ #include <array>
++#include <limits>
+ 
+ namespace Fsl
+ {
+diff --git a/DemoFramework/FslGraphics3D/SceneFormat/source/FslGraphics3D/SceneFormat/Conversion.cpp b/DemoFramework/FslGraphics3D/SceneFormat/source/FslGraphics3D/SceneFormat/Conversion.cpp
+index a916929a..4247926e 100644
+--- a/DemoFramework/FslGraphics3D/SceneFormat/source/FslGraphics3D/SceneFormat/Conversion.cpp
++++ b/DemoFramework/FslGraphics3D/SceneFormat/source/FslGraphics3D/SceneFormat/Conversion.cpp
+@@ -34,6 +34,7 @@
+ #include <algorithm>
+ #include <cassert>
+ #include <vector>
++#include <limits>
+ 
+ namespace Fsl
+ {
+diff --git a/DemoFramework/FslSimpleUI/Base/source/FslSimpleUI/Base/Layout/GridLayout.cpp b/DemoFramework/FslSimpleUI/Base/source/FslSimpleUI/Base/Layout/GridLayout.cpp
+index fc718ea0..953176d1 100644
+--- a/DemoFramework/FslSimpleUI/Base/source/FslSimpleUI/Base/Layout/GridLayout.cpp
++++ b/DemoFramework/FslSimpleUI/Base/source/FslSimpleUI/Base/Layout/GridLayout.cpp
+@@ -163,7 +163,7 @@ namespace Fsl
+         m_definitionCache.HasEntriesX = true;
+       }
+ 
+-      return m_definitionsX.emplace_back(definition);
++      m_definitionsX.emplace_back(definition);
+     }
+ 
+     void GridLayout::AddRowDefinition(const GridRowDefinition& definition)
+@@ -175,7 +175,7 @@ namespace Fsl
+         m_definitionCache.HasEntriesY = true;
+       }
+ 
+-      return m_definitionsY.emplace_back(definition);
++      m_definitionsY.emplace_back(definition);
+     }
+ 
+ 
+-- 
+2.25.1" > $GRAPHIC_DTS/imx8-graphic/recipes-graphics/imx-gpu-sdk/files/0001-Fix-build-warning-for-C-11.patch
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv/Add-dummy-libgl.patch
-file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv_6.4.3.p1.0-aarch64.bb \
-			"s/fd4b227530cd88a82af6a5982cfb724d/6c12031a11b81db21cdfe0be88cac4b3/g" \
-			"s/f4005a4a2dba6a79d8f25547612aa3b9/7c2f504897e6b4495433546ab7d27912/g" \
-			"s/148e1b1a9e382a8159d5763dd2b08caad008eb931f3d925ac901c2438440d508/45852a5c3c61a9215a2ffb7387a6e1cce7ddac6f12513fc77459ad7e1f1b3a27/g"
+file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv_6.4.3.p1.2-aarch64.bb
 file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv-6.inc \
 			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g" \
 			"/kernel-module-imx-gpu-viv/d"
@@ -597,12 +669,10 @@ file_copy recipes-graphics/imx-gpu-viv/imx-gpu-viv-6.inc \
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 file_copy recipes-graphics/mesa/mesa_%.bbappend \
 			"s/'DISTRO_FEATURES', 'wayland'/'DISTRO_FEATURES', 'weston-demo'/g" \
-			"47,49d" \
-			"31,33d" \
-			"47i\    rm -f \${D}\${includedir}/GL/glcorearb.h" \
 			"\$a\\\n# Undo customization in meta-freescale that doesn't apply to 8DXL" \
-			"\$aPACKAGECONFIG_remove_mx8dxl = \"osmesa\"" \
-			"\$aDRIDRIVERS_remove = \"swrast\""
+			"28,36d" \
+                        "\$aPACKAGECONFIG_remove_mx8dxl = \"osmesa\"" \
+                        "\$aDRIDRIVERS_remove = \"swrast\""
 
 file_copy recipes-graphics/mesa/mesa-demos/Add-OpenVG-demos-to-support-wayland.patch
 file_copy recipes-graphics/mesa/mesa-demos/fix-clear-build-break.patch
@@ -616,9 +686,61 @@ file_copy recipes-graphics/rapidopencl/rapidopencl_1.1.0.1.bb
 file_copy recipes-graphics/rapidopenvx/rapidopenvx_1.1.0.bb
 file_copy recipes-graphics/rapidvulkan/rapidvulkan_1.2.141.2001.bb
 
-file_copy recipes-graphics/vulkan/spirv-tools_git.bb
+file_copy recipes-graphics/vulkan/spirv-tools_git.bb \
+				'13i\    file://0001-Fix-build-error-range-loop-analysis-diagnostic.patch \\' \
+				"24i\CXXFLAGS += \"-Wno-stringop-truncation\""
 file_copy recipes-graphics/vulkan/spirv-tools/0001-Avoid-GCC8-warning-in-text_handler.cpp.-2197.patch
 file_copy recipes-graphics/vulkan/spirv-tools/0001-tools-lesspipe-Allow-generic-shell.patch
+mkdir -p $GRAPHIC_DTS/imx8-graphic/recipes-graphics/vulkan/spirv-tools/files
+touch $GRAPHIC_DTS/imx8-graphic/recipes-graphics/vulkan/spirv-tools/0001-Fix-build-error-range-loop-analysis-diagnostic.patch
+echo "From c1a1cf55531d431234d7f42520635303b522a18a Mon Sep 17 00:00:00 2001
+From: Xiaolei Wang <xiaolei.wang@windriver.com>
+Date: Wed, 14 Jul 2021 19:00:38 +0800
+Subject: [PATCH] Fix build error 'range-loop-analysis' diagnostic
+
+Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
+---
+ source/val/validate.cpp         | 4 ++--
+ source/val/validation_state.cpp | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/source/val/validate.cpp b/source/val/validate.cpp
+index 6f1a26c6..477e4f17 100644
+--- a/source/val/validate.cpp
++++ b/source/val/validate.cpp
+@@ -142,7 +142,7 @@ spv_result_t ValidateEntryPointNameUnique(ValidationState_t& _,
+   for (const auto other_id : _.entry_points()) {
+     if (other_id == id) continue;
+     const auto other_id_names = CalculateNamesForEntryPoint(_, other_id);
+-    for (const auto other_id_name : other_id_names) {
++    for (const auto &other_id_name : other_id_names) {
+       if (names.find(other_id_name) != names.end()) {
+         return _.diag(SPV_ERROR_INVALID_BINARY, _.FindDef(id))
+                << "Entry point name \"" << other_id_name
+@@ -410,7 +410,7 @@ spv_result_t ValidateBinaryUsingContextAndValidationState(
+   if (auto error = ValidateBuiltIns(*vstate)) return error;
+   // These checks must be performed after individual opcode checks because
+   // those checks register the limitation checked here.
+-  for (const auto inst : vstate->ordered_instructions()) {
++  for (const auto &inst : vstate->ordered_instructions()) {
+     if (auto error = ValidateExecutionLimitations(*vstate, &inst)) return error;
+     if (auto error = ValidateSmallTypeUses(*vstate, &inst)) return error;
+   }
+diff --git a/source/val/validation_state.cpp b/source/val/validation_state.cpp
+index 794d0f7b..91421edd 100644
+--- a/source/val/validation_state.cpp
++++ b/source/val/validation_state.cpp
+@@ -1057,7 +1057,7 @@ void ValidationState_t::ComputeFunctionToEntryPointMapping() {
+ }
+
+ void ValidationState_t::ComputeRecursiveEntryPoints() {
+-  for (const Function func : functions()) {
++  for (const Function &func : functions()) {
+     std::stack<uint32_t> call_stack;
+     std::set<uint32_t> visited;
+
+--
+2.25.1" > $GRAPHIC_DTS/imx8-graphic/recipes-graphics/vulkan/spirv-tools/0001-Fix-build-error-range-loop-analysis-diagnostic.patch
 
 file_copy recipes-graphics/vulkan/vkmark_1.0.bb
 file_copy recipes-graphics/vulkan/vkmark/0001-scenes-Use-depth-format-supported-by-i.MX.patch
@@ -643,7 +765,9 @@ file_copy recipes-graphics/vulkan/vulkan-tools_1.1.121.bb
 file_copy recipes-graphics/vulkan/vulkan-tools_%.bbappend
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
-file_copy recipes-graphics/vulkan/assimp_4.1.0.bbappend
+file_copy recipes-graphics/vulkan/assimp_5.0.1.bb
+file_copy recipes-graphics/vulkan/assimp/0001-closes-https-github.com-assimp-assimp-issues-2733-up.patch
+file_copy recipes-graphics/vulkan/assimp/0001-Use-ASSIMP_LIB_INSTALL_DIR-to-search-library.patch
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 file_copy recipes-graphics/wayland/weston-init.bbappend \
@@ -651,13 +775,53 @@ file_copy recipes-graphics/wayland/weston-init.bbappend \
 			"\$a\\\nSRC_URI += \"file://profile\""
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
-file_copy recipes-graphics/wayland/weston-init/weston.ini
+file_copy recipes-graphics/wayland/weston-init/imx/weston.ini
 file_copy recipes-graphics/wayland/weston-init/profile
 SOURCE_DIR=$GRAPHIC_SRC/poky/meta/
 file_copy recipes-graphics/wayland/weston-init.bb \
-		'49i\COMPATIBLE_MACHINE_nxp-imx8 = \"nxp-imx8\"' \	
+                '72i\COMPATIBLE_MACHINE_nxp-imx8 = \"nxp-imx8\"'
 file_copy recipes-graphics/wayland/weston-init/weston-start
 file_copy recipes-graphics/wayland/weston-init/weston@.service
+echo "[Unit]
+Description=Weston Wayland Compositor (on tty7)
+RequiresMountsFor=/run
+Conflicts=getty@tty7.service plymouth-quit.service
+After=systemd-user-sessions.service getty@tty7.service plymouth-quit-wait.service
+
+[Service]
+User=%i
+PermissionsStartOnly=true
+
+# Log us in via PAM so we get our XDG & co. environment and
+# are treated as logged in so we can use the tty:
+PAMName=login
+
+# Grab tty7
+UtmpIdentifier=tty7
+TTYPath=/dev/tty7
+TTYReset=yes
+TTYVHangup=yes
+TTYVTDisallocate=yes
+
+# stderr to journal so our logging doesn't get thrown into /dev/null
+StandardOutput=tty
+StandardInput=tty
+StandardError=journal
+
+EnvironmentFile=-/etc/default/weston
+
+# Weston does not successfully change VT, nor does systemd place us on
+# the VT it just activated for us. Switch manually:
+ExecStartPre=/usr/bin/chvt 7
+ExecStart=/usr/bin/weston --log=${XDG_RUNTIME_DIR}/weston.log $OPTARGS
+
+IgnoreSIGPIPE=no
+
+#[Install]
+#Alias=multi-user.target.wants/weston.service" > $GRAPHIC_DTS/imx8-graphic/recipes-graphics/wayland/weston-init/weston@.service
+file_copy recipes-graphics/wayland/weston-init/weston.env
+file_copy recipes-graphics/wayland/weston-init/weston@.socket
+file_copy recipes-graphics/wayland/weston-init/weston-autologin
 file_copy recipes-graphics/wayland/weston-init/init
 file_copy recipes-graphics/wayland/weston-init/71-weston-drm.rules
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
@@ -665,16 +829,50 @@ file_copy recipes-graphics/wayland/weston-init/mx6sl/weston.config
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 file_copy recipes-graphics/wayland/weston_9.0.0.imx.bb
+SOURCE_DIR=$GRAPHIC_SRC/poky/meta/
 file_copy recipes-graphics/wayland/weston_9.0.0.bb
 file_copy recipes-graphics/wayland/weston/0001-weston-launch-Provide-a-default-version-that-doesn-t.patch
 file_copy recipes-graphics/wayland/weston/0001-tests-include-fcntl.h-for-open-O_RDWR-O_CLOEXEC-and-.patch
 file_copy recipes-graphics/wayland/weston/weston.desktop
 file_copy recipes-graphics/wayland/weston/weston.png
 file_copy recipes-graphics/wayland/weston/xwayland.weston-start
+echo "From a2ba4714a6872e547621d29d9ddcb0f374b88cf6 Mon Sep 17 00:00:00 2001
+From: Chen Qi <Qi.Chen@windriver.com>
+Date: Tue, 20 Apr 2021 20:42:18 -0700
+Subject: [PATCH] meson.build: fix incorrect header
 
+The wayland.c actually include 'xdg-shell-client-protocol.h' instead of
+the server one, so fix it. Otherwise, it's possible to get build failure
+due to race condition.
+
+Upstream-Status: Pending
+
+Signed-off-by: Chen Qi <Qi.Chen@windriver.com>
+---
+ libweston/backend-wayland/meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libweston/backend-wayland/meson.build b/libweston/backend-wayland/meson.build
+index 7e82513..29270b5 100644
+--- a/libweston/backend-wayland/meson.build
++++ b/libweston/backend-wayland/meson.build
+@@ -10,7 +10,7 @@ srcs_wlwl = [
+ 	fullscreen_shell_unstable_v1_protocol_c,
+ 	presentation_time_protocol_c,
+ 	presentation_time_server_protocol_h,
+-	xdg_shell_server_protocol_h,
++	xdg_shell_client_protocol_h,
+ 	xdg_shell_protocol_c,
+ ]
+ 
+-- 
+2.30.2" >$GRAPHIC_DTS/imx8-graphic/recipes-graphics/wayland/weston/0001-meson.build-fix-incorrect-header.patch
+
+file_copy recipes-graphics/wayland/wayland-protocols_1.20.bb
+SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 file_copy recipes-graphics/wayland/wayland-protocols_1.20.imx.bb
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
-file_copy recipes-graphics/wayland/wayland-protocols_1.17.imx.bb
+file_copy recipes-graphics/wayland/wayland-protocols_1.18.imx.bb
 
 file_copy recipes-graphics/xorg-xserver/xserver-xorg_%.bbappend \
 			"\$a# Trailing space is intentional due to a bug in meta-freescale" \
@@ -682,6 +880,18 @@ file_copy recipes-graphics/xorg-xserver/xserver-xorg_%.bbappend \
 			"8d"
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 file_copy recipes-graphics/xorg-xserver/xserver-xorg/0001-glamor-Use-CFLAGS-for-EGL-and-GBM.patch
+file_copy recipes-graphics/xorg-xserver/xserver-xorg_1.20.8.bb
+file_copy recipes-graphics/xorg-xserver/xserver-xorg.inc
+file_copy recipes-graphics/xorg-xserver/xserver-xorg/0001-drmmode_display.c-add-missing-mi.h-include.patch
+file_copy recipes-graphics/xorg-xserver/xserver-xorg/0001-prefer-to-use-GLES2-for-glamor-EGL-config.patch
+file_copy recipes-graphics/xorg-xserver/xserver-xorg/0001-glamor-Use-CFLAGS-for-EGL-and-GBM.patch
+file_copy recipes-graphics/xorg-xserver/xserver-xorg/0002-MGS-5186-Per-Specification-EGL_NATIVE_PIXMAP_KHR-req.patch
+file_copy recipes-graphics/xorg-xserver/xserver-xorg/0001-MGS-5186-Per-Specification-EGL_NATIVE_PIXMAP_KHR-req.patch
+file_copy recipes-graphics/xorg-xserver/xserver-xorg/0003-Remove-GL-library-and-dependency-from-xwayland.patch
+file_copy recipes-graphics/xorg-xserver/files/0001-test-xtest-Initialize-array-with-braces.patch
+file_copy recipes-graphics/xorg-xserver/files/0001-xf86pciBus.c-use-Intel-ddx-only-for-pre-gen4-hardwar.patch
+file_copy recipes-graphics/xorg-xserver/files/pkgconfig.patch
+file_copy recipes-graphics/xorg-xserver/files/sdksyms-no-build-path.patch
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-freescale/
 file_copy recipes-graphics/xorg-xserver/xserver-xf86-config_%.bbappend
@@ -689,10 +899,10 @@ SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 file_copy recipes-graphics/xorg-xserver/xserver-xf86-config/imx/xorg.conf
 file_copy recipes-graphics/xorg-xserver/xserver-xf86-config/imxdrm/xorg.conf
 
-file_copy recipes-kernel/linux/linux-imx-headers_5.4.bb \
+file_copy recipes-kernel/linux/linux-imx-headers_5.10.bb \
 			"9iDEPENDS += \"rsync-native\"" \
 			"11,16d" \
-			"11iSRCBRANCH = \"v5.10/standard/nxp-sdk-5.4/nxp-imx8\"" \
+			"11iSRCBRANCH = \"v5.10/standard/nxp-sdk-5.10/nxp-soc\"" \
 			"12iKERNEL_SRC ?= \"git://\${LAYER_PATH_wrlinux}/git/linux-yocto.git;protocol=file\"" \
 			"13iSRC_URI = \"\${KERNEL_SRC};branch=\${SRCBRANCH}\"" \
 			"14iSRCREV = \"\${AUTOREV}\""
