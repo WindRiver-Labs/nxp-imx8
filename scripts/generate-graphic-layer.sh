@@ -190,7 +190,7 @@ PREFERRED_PROVIDER_virtual/libg2d_imxdpu     ?= "imx-dpu-g2d"
 PREFERRED_VERSION_imx-vpu = "5.4.39.1"
 PREFERRED_VERSION_wayland-protocols = "1.18.imx"
 PREFERRED_VERSION_libdrm = "2.4.99.imx"
-PREFERRED_VERSION_weston = "7.0.0.imx"
+PREFERRED_VERSION_weston = "9.0.0.imx"
 
 PREFERRED_PROVIDER_opencl-headers_nxp-imx8 = "imx-gpu-viv"
 
@@ -829,8 +829,10 @@ file_copy recipes-graphics/wayland/weston-init/mx6sl/weston.config
 
 SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 file_copy recipes-graphics/wayland/weston_9.0.0.imx.bb
+sed -i "s/weston_9.0.0.bb/weston_9.0.0.sdk.bb/g" $DESTINATION_DIR/recipes-graphics/wayland/weston_9.0.0.imx.bb
 SOURCE_DIR=$GRAPHIC_SRC/poky/meta/
 file_copy recipes-graphics/wayland/weston_9.0.0.bb
+mv $DESTINATION_DIR/recipes-graphics/wayland/weston_9.0.0.bb $DESTINATION_DIR/recipes-graphics/wayland/weston_9.0.0.sdk.bb
 file_copy recipes-graphics/wayland/weston/0001-weston-launch-Provide-a-default-version-that-doesn-t.patch
 file_copy recipes-graphics/wayland/weston/0001-tests-include-fcntl.h-for-open-O_RDWR-O_CLOEXEC-and-.patch
 file_copy recipes-graphics/wayland/weston/weston.desktop
