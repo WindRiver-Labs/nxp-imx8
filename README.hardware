@@ -20,7 +20,8 @@ This BSP supports the following boards:
 2. Change History
 =================
 
-  - 2021/07 (LINUXPG-827): WindRiver CI/CD branch support. Support MCIMX8QM-MEK board based on NXP IMX SDK v5.10.9
+  - 2021/10 (LINUXPG-962): Wind River Linux 10.21 RCPL07. Support MCIMX8QM-MEK board for both standard and preempt-rt
+                           kernel based on NXP IMX SDK v5.10.9
 
 3. BSP Features
 ===============
