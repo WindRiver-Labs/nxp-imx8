@@ -335,7 +335,8 @@ SOURCE_DIR=$GRAPHIC_SRC/meta-imx/meta-bsp/
 
 file_copy recipes-bsp/imx-vpu-hantro/imx-vpu-hantro_1.21.0.bb
 file_copy recipes-bsp/imx-vpu-hantro/imx-vpu-hantro.inc \
-			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g"
+			"s/fsl-eula-unpack/fsl-eula-unpack-graphic/g" \
+			"31i\COMPATIBLE_HOST = \"aarch64.*-linux\" "
 
 file_copy recipes-core/systemd/systemd/0020-logind.conf-Set-HandlePowerKey-to-ignore.patch
 file_copy recipes-core/systemd/systemd_%.bbappend \
