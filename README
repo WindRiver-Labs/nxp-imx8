@@ -1,4 +1,4 @@
-        MCIMX8QM-MEK Board Support Package
+        MCIMX8QM-MEK/MCIMX8M-EVK Board Support Package
 
 1. About this document
 ======================
@@ -145,6 +145,8 @@ For MCIMX8QM-MEK board:
 
 Note: for MCIMX8QM-MEK board, $kernel_addr="0x80280000", $fdt_addr="0x87000000"
 	$console_port = "ttyLP0,115200"
+      For MCIMX8M-EVK board, $kernel_addr="0x40480000", $fdt_addr="0x44000000"
+        $console_port = "ttymxc0,115200"
       The kernel image will become larger if more kernel code is compiled into kernel image.
       So, please increase "fdt_addr" value by putting dtb file at higher address if you encounter with kernel booting failed.
 
@@ -379,6 +381,9 @@ argument "crashkernel" to the boot kernel as follow:
 
 For MCIMX8QM-MEK board:
 	crashkernel=512M
+
+For MCIMX8M-EVK board:
+        crashkernel=512M@3000M
 
 For the dump-capture kernel:
 Before booting the dump-capture kernel, add "maxcpus=1 cma=128M" to the boot parameter.
